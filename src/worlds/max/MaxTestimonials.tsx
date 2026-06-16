@@ -1,8 +1,12 @@
-import { useState, useRef } from 'react';
+// ============================================
+// Max Testimonials - Face Cards with Marquee
+// Modern infinite scroll testimonials
+// ============================================
+
+import { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Star, Quote, Play, X } from 'lucide-react';
+import { Quote, Play, X, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Container } from '@/components/ui';
-import { useStaggerAnimation } from '@/hooks/useMotion';
 import { YouTubeEmbed } from '@/components/video/OptimizedVideo';
 
 interface Testimonial {
@@ -17,13 +21,6 @@ interface Testimonial {
   featured?: boolean;
 }
 
-interface MaxTestimonialsProps {
-  sectionTitle?: string;
-  headline?: string;
-  description?: string;
-  testimonials?: Testimonial[];
-}
-
 const defaultTestimonials: Testimonial[] = [
   {
     id: '1',
@@ -31,7 +28,7 @@ const defaultTestimonials: Testimonial[] = [
     author: 'Sarah Chen',
     role: 'Head of Content',
     company: 'Tech Giant Inc',
-    image: { src: 'https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg', alt: 'Sarah Chen' },
+    image: { src: 'https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg?auto=compress&cs=tinysrgb&w=200', alt: 'Sarah Chen' },
     rating: 5,
     videoId: 'dQw4w9WgXcQ',
     featured: true,
@@ -42,7 +39,7 @@ const defaultTestimonials: Testimonial[] = [
     author: 'Michael Torres',
     role: 'Marketing Director',
     company: 'Global Media Co',
-    image: { src: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg', alt: 'Michael Torres' },
+    image: { src: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=200', alt: 'Michael Torres' },
     rating: 5,
   },
   {
@@ -51,7 +48,7 @@ const defaultTestimonials: Testimonial[] = [
     author: 'Emily Watson',
     role: 'Creative Lead',
     company: 'Innovation Labs',
-    image: { src: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg', alt: 'Emily Watson' },
+    image: { src: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=200', alt: 'Emily Watson' },
     rating: 5,
   },
   {
@@ -60,7 +57,7 @@ const defaultTestimonials: Testimonial[] = [
     author: 'David Park',
     role: 'CEO',
     company: 'Startup Ventures',
-    image: { src: 'https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg', alt: 'David Park' },
+    image: { src: 'https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=200', alt: 'David Park' },
     rating: 5,
     videoId: 'dQw4w9WgXcQ',
     featured: true,
@@ -71,7 +68,7 @@ const defaultTestimonials: Testimonial[] = [
     author: 'Jessica Lee',
     role: 'Brand Manager',
     company: 'Fortune 500',
-    image: { src: 'https://images.pexels.com/photos/3764119/pexels-photo-3764119.jpeg', alt: 'Jessica Lee' },
+    image: { src: 'https://images.pexels.com/photos/3764119/pexels-photo-3764119.jpeg?auto=compress&cs=tinysrgb&w=200', alt: 'Jessica Lee' },
     rating: 5,
   },
   {
@@ -80,12 +77,36 @@ const defaultTestimonials: Testimonial[] = [
     author: 'Robert Kim',
     role: 'VP of Marketing',
     company: 'Digital First',
-    image: { src: 'https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg', alt: 'Robert Kim' },
+    image: { src: 'https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg?auto=compress&cs=tinysrgb&w=200', alt: 'Robert Kim' },
     rating: 5,
     videoId: 'dQw4w9WgXcQ',
-    featured: true,
+  },
+  {
+    id: '7',
+    quote: 'X-ERA Max completely revolutionized how we approach video content. Game-changing partnership.',
+    author: 'Amanda Foster',
+    role: 'Content Director',
+    company: 'Creative Studios',
+    image: { src: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=200', alt: 'Amanda Foster' },
+    rating: 5,
+  },
+  {
+    id: '8',
+    quote: 'The team delivered beyond our expectations. Every project has been outstanding.',
+    author: 'James Wright',
+    role: 'Executive Producer',
+    company: 'Media House',
+    image: { src: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=200', alt: 'James Wright' },
+    rating: 5,
   },
 ];
+
+interface MaxTestimonialsProps {
+  sectionTitle?: string;
+  headline?: string;
+  description?: string;
+  testimonials?: Testimonial[];
+}
 
 export function MaxTestimonials({
   sectionTitle = 'Client Stories',
@@ -93,25 +114,28 @@ export function MaxTestimonials({
   description = 'Hear directly from our partners about their experience working with X-ERA Max.',
   testimonials = defaultTestimonials,
 }: MaxTestimonialsProps) {
-  const [activeIndex, setActiveIndex] = useState(0);
   const [videoModal, setVideoModal] = useState<Testimonial | null>(null);
+  const [featuredIndex, setFeaturedIndex] = useState(0);
+  const marqueeRef = useRef<HTMLDivElement>(null);
 
   const featuredTestimonials = testimonials.filter((t) => t.featured || t.videoId);
+  const upperRow = testimonials.slice(0, Math.ceil(testimonials.length / 2));
+  const lowerRow = testimonials.slice(Math.ceil(testimonials.length / 2));
 
-  const nextTestimonial = () => {
-    setActiveIndex((prev) => (prev + 1) % featuredTestimonials.length);
+  const nextFeatured = () => {
+    setFeaturedIndex((prev) => (prev + 1) % featuredTestimonials.length);
   };
 
-  const prevTestimonial = () => {
-    setActiveIndex((prev) => (prev - 1 + featuredTestimonials.length) % featuredTestimonials.length);
+  const prevFeatured = () => {
+    setFeaturedIndex((prev) => (prev - 1 + featuredTestimonials.length) % featuredTestimonials.length);
   };
 
   return (
     <section id="testimonials" className="relative py-32 overflow-hidden" style={{ background: '#020814' }}>
-      {/* Background */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#00BFFF]/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#00BFFF]/5 rounded-full blur-3xl" />
+      {/* Background Effects */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full" style={{ background: 'radial-gradient(circle, rgba(0, 212, 255, 0.08) 0%, transparent 70%)' }} />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full" style={{ background: 'radial-gradient(circle, rgba(0, 212, 255, 0.06) 0%, transparent 70%)' }} />
       </div>
 
       <Container className="relative z-10">
@@ -120,14 +144,14 @@ export function MaxTestimonials({
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-20"
+          className="text-center mb-16"
         >
           <motion.span
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ delay: 0.1 }}
             className="inline-block text-sm font-semibold tracking-widest uppercase mb-4"
-            style={{ color: '#00BFFF' }}
+            style={{ color: '#00d4ff', textShadow: '0 0 20px rgba(0, 212, 255, 0.5)' }}
           >
             {sectionTitle}
           </motion.span>
@@ -160,7 +184,7 @@ export function MaxTestimonials({
             <div className="max-w-5xl mx-auto">
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={activeIndex}
+                  key={featuredIndex}
                   initial={{ opacity: 0, x: 50 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -50 }}
@@ -170,60 +194,70 @@ export function MaxTestimonials({
                   {/* Video/Image Section */}
                   <div className="relative rounded-2xl overflow-hidden group" style={{ aspectRatio: '16/9' }}>
                     <img
-                      src={featuredTestimonials[activeIndex].image.src}
-                      alt={featuredTestimonials[activeIndex].image.alt}
+                      src={featuredTestimonials[featuredIndex].image.src}
+                      alt={featuredTestimonials[featuredIndex].image.alt}
                       className="w-full h-full object-cover"
                       loading="lazy"
                       decoding="async"
                     />
 
-                    {/* Play Button Overlay */}
-                    {featuredTestimonials[activeIndex].videoId && (
-                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center group-hover:bg-black/50 transition-colors">
+                    {featuredTestimonials[featuredIndex].videoId && (
+                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center group-hover:bg-black/50 transition-colors duration-300">
                         <button
-                          onClick={() => setVideoModal(featuredTestimonials[activeIndex])}
-                          className="w-20 h-20 rounded-full bg-[#00BFFF] flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
-                          aria-label={`Play testimonial from ${featuredTestimonials[activeIndex].author}`}
+                          onClick={() => setVideoModal(featuredTestimonials[featuredIndex])}
+                          className="w-20 h-20 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300"
+                          style={{
+                            background: 'linear-gradient(135deg, #00d4ff 0%, #0099cc 100%)',
+                            boxShadow: '0 0 40px rgba(0, 212, 255, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.2)'
+                          }}
+                          aria-label={`Play testimonial from ${featuredTestimonials[featuredIndex].author}`}
                         >
-                          <Play className="w-8 h-8 text-white ml-1" />
+                          <Play className="w-8 h-8 text-white ml-1" style={{ filter: 'drop-shadow(0 0 10px rgba(255,255,255,0.5))' }} />
                         </button>
                       </div>
                     )}
 
-                    {/* Badge */}
-                    <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-[#00BFFF] text-white text-xs font-medium">
+                    <div
+                      className="absolute top-4 left-4 px-3 py-1 rounded-full text-white text-xs font-medium"
+                      style={{
+                        background: 'rgba(0, 212, 255, 0.9)',
+                        boxShadow: '0 0 20px rgba(0, 212, 255, 0.5)'
+                      }}
+                    >
                       Video Testimonial
                     </div>
                   </div>
 
                   {/* Quote Section */}
                   <div className="space-y-6">
-                    <Quote className="w-12 h-12 text-[#00BFFF]/30" />
+                    <Quote className="w-12 h-12" style={{ color: '#00d4ff', opacity: 0.4 }} />
                     <blockquote className="text-2xl md:text-3xl text-white font-light leading-relaxed">
-                      "{featuredTestimonials[activeIndex].quote}"
+                      "{featuredTestimonials[featuredIndex].quote}"
                     </blockquote>
 
                     <div className="flex items-center gap-4">
                       <img
-                        src={featuredTestimonials[activeIndex].image.src}
-                        alt={featuredTestimonials[activeIndex].image.alt}
-                        className="w-14 h-14 rounded-full object-cover ring-2 ring-[#00BFFF]/30"
+                        src={featuredTestimonials[featuredIndex].image.src}
+                        alt={featuredTestimonials[featuredIndex].image.alt}
+                        className="w-14 h-14 rounded-full object-cover"
+                        style={{
+                          boxShadow: '0 0 0 3px rgba(0, 212, 255, 0.3), 0 0 20px rgba(0, 212, 255, 0.3)'
+                        }}
                       />
                       <div>
                         <div className="font-bold text-white text-lg">
-                          {featuredTestimonials[activeIndex].author}
+                          {featuredTestimonials[featuredIndex].author}
                         </div>
                         <div className="text-white/60">
-                          {featuredTestimonials[activeIndex].role}, {featuredTestimonials[activeIndex].company}
+                          {featuredTestimonials[featuredIndex].role}, {featuredTestimonials[featuredIndex].company}
                         </div>
                       </div>
                     </div>
 
-                    {/* Rating */}
-                    {featuredTestimonials[activeIndex].rating && (
+                    {featuredTestimonials[featuredIndex].rating && (
                       <div className="flex gap-1">
-                        {[...Array(featuredTestimonials[activeIndex].rating!)].map((_, i) => (
-                          <Star key={i} className="w-5 h-5 text-[#00BFFF]" style={{ fill: '#00BFFF' }} />
+                        {[...Array(featuredTestimonials[featuredIndex].rating!)].map((_, i) => (
+                          <Star key={i} className="w-5 h-5" style={{ fill: '#00d4ff', color: '#00d4ff', filter: 'drop-shadow(0 0 5px rgba(0, 212, 255, 0.5))' }} />
                         ))}
                       </div>
                     )}
@@ -234,8 +268,12 @@ export function MaxTestimonials({
               {/* Navigation */}
               <div className="flex items-center justify-center gap-6 mt-10">
                 <button
-                  onClick={prevTestimonial}
-                  className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white hover:border-[#00BFFF] hover:bg-[#00BFFF]/10 transition-all"
+                  onClick={prevFeatured}
+                  className="w-12 h-12 rounded-full flex items-center justify-center text-white transition-all duration-300"
+                  style={{
+                    border: '2px solid rgba(255, 255, 255, 0.2)',
+                    background: 'rgba(0, 212, 255, 0.05)'
+                  }}
                   aria-label="Previous testimonial"
                 >
                   <ChevronLeft className="w-5 h-5" />
@@ -245,18 +283,26 @@ export function MaxTestimonials({
                   {featuredTestimonials.map((_, index) => (
                     <button
                       key={index}
-                      onClick={() => setActiveIndex(index)}
-                      className={`rounded-full transition-all ${
-                        index === activeIndex ? 'w-8 h-2 bg-[#00BFFF]' : 'w-2 h-2 bg-white/20'
-                      }`}
+                      onClick={() => setFeaturedIndex(index)}
+                      className="rounded-full transition-all duration-300"
+                      style={{
+                        width: index === featuredIndex ? '32px' : '8px',
+                        height: '8px',
+                        background: index === featuredIndex ? '#00d4ff' : 'rgba(255, 255, 255, 0.2)',
+                        boxShadow: index === featuredIndex ? '0 0 20px rgba(0, 212, 255, 0.5)' : 'none'
+                      }}
                       aria-label={`Go to testimonial ${index + 1}`}
                     />
                   ))}
                 </div>
 
                 <button
-                  onClick={nextTestimonial}
-                  className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white hover:border-[#00BFFF] hover:bg-[#00BFFF]/10 transition-all"
+                  onClick={nextFeatured}
+                  className="w-12 h-12 rounded-full flex items-center justify-center text-white transition-all duration-300"
+                  style={{
+                    border: '2px solid rgba(255, 255, 255, 0.2)',
+                    background: 'rgba(0, 212, 255, 0.05)'
+                  }}
                   aria-label="Next testimonial"
                 >
                   <ChevronRight className="w-5 h-5" />
@@ -265,84 +311,130 @@ export function MaxTestimonials({
             </div>
           </motion.div>
         )}
-
-        {/* Testimonial Grid */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="grid md:grid-cols-3 gap-6"
-        >
-          {testimonials.slice(0, 6).map((testimonial, index) => (
-            <motion.div
-              key={testimonial.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="p-6 rounded-xl bg-white/5 border border-white/10 hover:border-[#00BFFF]/30 transition-all group"
-            >
-              {/* Rating */}
-              {testimonial.rating && (
-                <div className="flex gap-0.5 mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 text-[#00BFFF]" style={{ fill: '#00BFFF' }} />
-                  ))}
-                </div>
-              )}
-
-              {/* Quote */}
-              <blockquote className="text-white/80 mb-6 line-clamp-4">
-                "{testimonial.quote}"
-              </blockquote>
-
-              {/* Author */}
-              <div className="flex items-center gap-3">
-                <img
-                  src={testimonial.image.src}
-                  alt={testimonial.image.alt}
-                  className="w-10 h-10 rounded-full object-cover"
-                  loading="lazy"
-                />
-                <div>
-                  <div className="font-medium text-white text-sm">{testimonial.author}</div>
-                  <div className="text-white/50 text-xs">{testimonial.role}</div>
-                </div>
-              </div>
-
-              {/* Video indicator */}
-              {testimonial.videoId && (
-                <button
-                  onClick={() => setVideoModal(testimonial)}
-                  className="mt-4 flex items-center gap-2 text-[#00BFFF] text-sm hover:underline"
-                >
-                  <PlayCircle className="w-4 h-4" />
-                  Watch Video
-                </button>
-              )}
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Logos */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mt-20 text-center"
-        >
-          <p className="text-white/40 text-sm mb-8">Trusted by leading brands worldwide</p>
-          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16 opacity-50">
-            {['TechCorp', 'MediaInc', 'InnovateCo', 'DigitalFirst', 'GlobalBrand', 'NextGen'].map(
-              (name) => (
-                <div key={name} className="text-xl font-bold text-white/30 tracking-wider">
-                  {name}
-                </div>
-              )
-            )}
-          </div>
-        </motion.div>
       </Container>
+
+      {/* Marquee Face Cards */}
+      <div ref={marqueeRef} className="overflow-hidden py-16">
+        {/* Upper Row - moving left */}
+        <div className="relative">
+          <motion.div
+            className="flex gap-6"
+            animate={{ x: ['0%', '-50%'] }}
+            transition={{
+              x: {
+                duration: 30,
+                repeat: Infinity,
+                ease: 'linear',
+              },
+            }}
+          >
+            {[...upperRow, ...upperRow].map((testimonial, index) => (
+              <motion.div
+                key={`${testimonial.id}-${index}`}
+                className="flex-shrink-0 w-80 p-6 rounded-2xl backdrop-blur-sm transition-all duration-300 group"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.03)',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                }}
+                whileHover={{
+                  borderColor: 'rgba(0, 212, 255, 0.4)',
+                  boxShadow: '0 0 30px rgba(0, 212, 255, 0.15), inset 0 0 20px rgba(0, 212, 255, 0.05)'
+                }}
+              >
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="relative">
+                    <img
+                      src={testimonial.image.src}
+                      alt={testimonial.image.alt}
+                      className="w-14 h-14 rounded-full object-cover"
+                      loading="lazy"
+                    />
+                    <div
+                      className="absolute inset-0 rounded-full"
+                      style={{
+                        boxShadow: '0 0 15px rgba(0, 212, 255, 0.4), inset 0 0 10px rgba(0, 212, 255, 0.2)',
+                        border: '2px solid rgba(0, 212, 255, 0.3)'
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <p className="text-white font-semibold">{testimonial.author}</p>
+                    <p className="text-white/50 text-sm">{testimonial.role}</p>
+                  </div>
+                </div>
+                <p className="text-white/70 text-sm leading-relaxed line-clamp-3">"{testimonial.quote}"</p>
+                {testimonial.rating && (
+                  <div className="flex gap-0.5 mt-4">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4" style={{ fill: '#00d4ff', color: '#00d4ff' }} />
+                    ))}
+                  </div>
+                )}
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Lower Row - moving right */}
+        <div className="relative mt-6">
+          <motion.div
+            className="flex gap-6"
+            animate={{ x: ['-50%', '0%'] }}
+            transition={{
+              x: {
+                duration: 35,
+                repeat: Infinity,
+                ease: 'linear',
+              },
+            }}
+          >
+            {[...lowerRow, ...lowerRow].map((testimonial, index) => (
+              <motion.div
+                key={`${testimonial.id}-lower-${index}`}
+                className="flex-shrink-0 w-80 p-6 rounded-2xl backdrop-blur-sm transition-all duration-300 group"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.03)',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                }}
+                whileHover={{
+                  borderColor: 'rgba(0, 212, 255, 0.4)',
+                  boxShadow: '0 0 30px rgba(0, 212, 255, 0.15), inset 0 0 20px rgba(0, 212, 255, 0.05)'
+                }}
+              >
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="relative">
+                    <img
+                      src={testimonial.image.src}
+                      alt={testimonial.image.alt}
+                      className="w-14 h-14 rounded-full object-cover"
+                      loading="lazy"
+                    />
+                    <div
+                      className="absolute inset-0 rounded-full"
+                      style={{
+                        boxShadow: '0 0 15px rgba(0, 212, 255, 0.4), inset 0 0 10px rgba(0, 212, 255, 0.2)',
+                        border: '2px solid rgba(0, 212, 255, 0.3)'
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <p className="text-white font-semibold">{testimonial.author}</p>
+                    <p className="text-white/50 text-sm">{testimonial.role}</p>
+                  </div>
+                </div>
+                <p className="text-white/70 text-sm leading-relaxed line-clamp-3">"{testimonial.quote}"</p>
+                {testimonial.rating && (
+                  <div className="flex gap-0.5 mt-4">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4" style={{ fill: '#00d4ff', color: '#00d4ff' }} />
+                    ))}
+                  </div>
+                )}
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </div>
 
       {/* Video Modal */}
       <AnimatePresence>
@@ -359,11 +451,15 @@ export function MaxTestimonials({
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
               className="relative w-full max-w-4xl rounded-xl overflow-hidden"
+              style={{
+                boxShadow: '0 0 60px rgba(0, 212, 255, 0.3), inset 0 0 30px rgba(0, 212, 255, 0.1)'
+              }}
               onClick={(e) => e.stopPropagation()}
             >
               <button
                 onClick={() => setVideoModal(null)}
-                className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+                className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full flex items-center justify-center text-white transition-colors"
+                style={{ background: 'rgba(0, 212, 255, 0.2)' }}
                 aria-label="Close"
               >
                 <X className="w-5 h-5" />

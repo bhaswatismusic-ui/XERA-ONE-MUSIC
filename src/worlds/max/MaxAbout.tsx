@@ -1,12 +1,11 @@
 // ============================================
-// Max About - With Blog/Social Media Integration
+// Max About - Social Media Integration
 // Instagram feed display + Social Links
 // ============================================
 
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Instagram, Youtube, Twitter, Music, ExternalLink, Plus } from 'lucide-react';
-import { staggerContainer, staggerItem } from '@/hooks/useMotion';
+import { Instagram, Youtube, Twitter, Music, ExternalLink } from 'lucide-react';
 
 // Mock Instagram feed data - In production, this would come from Instagram API
 const instagramPosts = [
@@ -25,44 +24,15 @@ const socialLinks = [
   { name: 'TikTok', icon: Music, url: '#', handle: '@xeramax', color: '#00F2EA' },
 ];
 
-// Blog posts data - In production, from CMS
-const blogPosts = [
-  {
-    id: 1,
-    title: 'The Future of Digital Media Distribution',
-    excerpt: 'Exploring how AI and automation are reshaping content delivery...',
-    date: '2024-01-15',
-    author: 'MAX Team',
-    image: 'https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=600',
-  },
-  {
-    id: 2,
-    title: 'Maximizing Content Reach with Data Analytics',
-    excerpt: 'Learn how to leverage data for better content decisions...',
-    date: '2024-01-10',
-    author: 'MAX Team',
-    image: 'https://images.pexels.com/photos/2187305/pexels-photo-2187305.jpeg?auto=compress&cs=tinysrgb&w=600',
-  },
-  {
-    id: 3,
-    title: 'Building Sustainable Creator Partnerships',
-    excerpt: 'Strategies for long-term creator success and growth...',
-    date: '2024-01-05',
-    author: 'MAX Team',
-    image: 'https://images.pexels.com/photos/265087/pexels-photo-265087.jpeg?auto=compress&cs=tinysrgb&w=600',
-  },
-];
-
 export function MaxAbout() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [activeView, setActiveView] = useState<'instagram' | 'blog'>('instagram');
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start end', 'end start'],
   });
 
-  const imageY = useTransform(scrollYProgress, [0, 1], [50, -50]);
+  useTransform(scrollYProgress, [0, 1], [50, -50]);
 
   return (
     <section ref={sectionRef} id="about" className="relative py-32 overflow-hidden" style={{ background: '#020814' }}>
@@ -74,6 +44,11 @@ export function MaxAbout() {
         }}
       />
 
+      {/* Neon glow decoration */}
+      <div className="absolute top-20 right-20 w-64 h-64 pointer-events-none">
+        <div className="absolute inset-0 rounded-full" style={{ background: 'radial-gradient(circle, rgba(0, 212, 255, 0.15) 0%, transparent 70%)' }} />
+      </div>
+
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <motion.div
@@ -82,149 +57,125 @@ export function MaxAbout() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <span className="text-sm font-semibold tracking-wider uppercase" style={{ color: '#00d4ff' }}>
+          <span
+            className="text-sm font-semibold tracking-wider uppercase"
+            style={{
+              color: '#00d4ff',
+              textShadow: '0 0 20px rgba(0, 212, 255, 0.5)'
+            }}
+          >
             About MAX
           </span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mt-4 mb-6">
-            Connect With Our <span style={{ color: '#00d4ff' }}>World</span>
+            Connect With Our <span style={{ color: '#00d4ff', textShadow: '0 0 30px rgba(0, 212, 255, 0.6)' }}>World</span>
           </h2>
           <p className="text-lg text-white/60 max-w-2xl mx-auto">
             Follow our journey, explore our content, and stay connected with the MAX community.
           </p>
         </motion.div>
 
-        {/* Tab Navigation */}
-        <div className="flex justify-center gap-2 mb-12">
-          {[
-            { id: 'instagram', label: 'Instagram Feed' },
-            { id: 'blog', label: 'Blog' },
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveView(tab.id as typeof activeView)}
-              className="px-6 py-3 rounded-lg text-sm font-medium transition-all"
+        {/* Instagram Grid */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-12"
+        >
+          {instagramPosts.map((post, index) => (
+            <motion.a
+              key={post.id}
+              href="#"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.05 }}
+              className="relative aspect-square rounded-lg overflow-hidden group"
               style={{
-                backgroundColor: activeView === tab.id ? 'rgba(0, 212, 255, 0.15)' : 'transparent',
-                color: activeView === tab.id ? '#00d4ff' : 'rgba(255,255,255,0.5)',
-                boxShadow: activeView === tab.id ? '0 0 20px rgba(0, 212, 255, 0.3)' : undefined,
+                boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.1)',
               }}
             >
-              {tab.label}
-            </button>
+              <img
+                src={post.image}
+                alt="Instagram post"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute bottom-2 left-2 text-white text-sm font-medium">
+                  <Instagram className="w-4 h-4 inline mr-1" />
+                  {post.likes}
+                </div>
+              </div>
+              <div
+                className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{
+                  boxShadow: 'inset 0 0 20px rgba(0, 212, 255, 0.4), 0 0 20px rgba(0, 212, 255, 0.2)',
+                  border: '2px solid rgba(0, 212, 255, 0.6)'
+                }}
+              />
+            </motion.a>
           ))}
-        </div>
+        </motion.div>
 
-        {/* Instagram Feed */}
-        {activeView === 'instagram' && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3 }}
-          >
-            {/* Instagram Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-12">
-              {instagramPosts.map((post, index) => (
-                <motion.a
-                  key={post.id}
-                  href="#"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: index * 0.05 }}
-                  className="relative aspect-square rounded-lg overflow-hidden group"
-                >
-                  <img
-                    src={post.image}
-                    alt="Instagram post"
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                    <div className="absolute bottom-2 left-2 text-white text-sm font-medium">
-                      <Instagram className="w-4 h-4 inline mr-1" />
-                      {post.likes}
-                    </div>
-                  </div>
-                  <div className="absolute inset-0 border-2 border-transparent group-hover:border-[#00d4ff] rounded-lg transition-colors" />
-                </motion.a>
-              ))}
-            </div>
-
-            {/* Social Links */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4"
+        {/* Social Links */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3 }}
+          className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4"
+        >
+          {socialLinks.map((social) => (
+            <a
+              key={social.name}
+              href={social.url}
+              className="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-all duration-300 group"
+              style={{
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+              }}
             >
-              {socialLinks.map((social) => (
-                <a
-                  key={social.name}
-                  href={social.url}
-                  className="flex items-center gap-4 p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all group"
-                  style={{ borderColor: `${social.color}30` }}
-                >
-                  <div className="w-12 h-12 rounded-lg flex items-center justify-center" style={{ background: `${social.color}20` }}>
-                    <social.icon className="w-6 h-6" style={{ color: social.color }} />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-white font-medium">{social.name}</p>
-                    <p className="text-white/50 text-sm">{social.handle}</p>
-                  </div>
-                  <ExternalLink className="w-4 h-4 text-white/30 group-hover:text-white transition-colors" />
-                </a>
-              ))}
-            </motion.div>
-          </motion.div>
-        )}
+              <div
+                className="w-12 h-12 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110"
+                style={{
+                  background: `${social.color}20`,
+                  boxShadow: `0 0 20px ${social.color}30`
+                }}
+              >
+                <social.icon className="w-6 h-6" style={{ color: social.color }} />
+              </div>
+              <div className="flex-1">
+                <p className="text-white font-medium">{social.name}</p>
+                <p className="text-white/50 text-sm">{social.handle}</p>
+              </div>
+              <ExternalLink className="w-4 h-4 text-white/30 group-hover:text-white transition-colors" />
+            </a>
+          ))}
+        </motion.div>
 
-        {/* Blog Posts */}
-        {activeView === 'blog' && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3 }}
+        {/* Follow CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5 }}
+          className="text-center mt-12"
+        >
+          <a
+            href="https://instagram.com/xeramax"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-3 px-8 py-4 rounded-full font-medium transition-all duration-300 hover:scale-105"
+            style={{
+              background: 'linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(0, 212, 255, 0.05) 100%)',
+              color: '#00d4ff',
+              border: '2px solid rgba(0, 212, 255, 0.5)',
+              boxShadow: '0 0 30px rgba(0, 212, 255, 0.3), inset 0 0 20px rgba(0, 212, 255, 0.1)'
+            }}
           >
-            {/* Blog Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-              {blogPosts.map((post, index) => (
-                <motion.article
-                  key={post.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="rounded-xl overflow-hidden border border-white/10 hover:border-[#00d4ff]/50 transition-all group cursor-pointer"
-                  style={{ background: 'rgba(0, 212, 255, 0.02)' }}
-                >
-                  <div className="aspect-video overflow-hidden">
-                    <img
-                      src={post.image}
-                      alt={post.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-center gap-2 mb-3 text-sm text-white/50">
-                      <span>{new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
-                      <span>•</span>
-                      <span>{post.author}</span>
-                    </div>
-                    <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-[#00d4ff] transition-colors">
-                      {post.title}
-                    </h3>
-                    <p className="text-white/60 text-sm line-clamp-2">{post.excerpt}</p>
-                  </div>
-                </motion.article>
-              ))}
-            </div>
-
-            {/* Write Blog CTA */}
-            <div className="text-center">
-              <button className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all hover:scale-105" style={{ background: 'rgba(0, 212, 255, 0.15)', color: '#00d4ff', border: '1px solid rgba(0, 212, 255, 0.3)' }}>
-                <Plus className="w-4 h-4" />
-                Write a Blog Post
-              </button>
-            </div>
-          </motion.div>
-        )}
+            <Instagram className="w-5 h-5" />
+            <span>Follow @xeramax</span>
+          </a>
+        </motion.div>
       </div>
     </section>
   );

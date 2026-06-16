@@ -1,7 +1,6 @@
 // ============================================
 // Max World - Main Component
-// Removed: Ecosystem, Solutions, Case Studies, FAQ
-// Added: Blog (in About), Merch (with payments)
+// Sections: Hero, About, Portfolio, Testimonials, Merch, Contact
 // ============================================
 
 import { CinematicBackground } from '@/components/effects';
@@ -10,9 +9,8 @@ import { SEO, createWorldSEO } from '@/components/seo';
 import {
   MaxHero,
   MaxAbout,
+  MaxPortfolio,
   MaxMerch,
-  MaxGrowth,
-  MaxPartnerships,
   MaxTestimonials,
   MaxContact,
 } from './';
@@ -42,29 +40,24 @@ export function MaxWorld() {
           {/* Hero Section */}
           <MaxHero {...maxData.hero} />
 
-          {/* About - with Blog & Instagram */}
+          {/* About - with Instagram */}
           <div id="about">
             <MaxAbout />
+          </div>
+
+          {/* Portfolio */}
+          <div id="portfolio">
+            <MaxPortfolio />
+          </div>
+
+          {/* Testimonials */}
+          <div id="testimonials">
+            <MaxTestimonials />
           </div>
 
           {/* Merch Store */}
           <div id="merch">
             <MaxMerch />
-          </div>
-
-          {/* Growth */}
-          <div id="growth">
-            <MaxGrowth {...maxData.growth} />
-          </div>
-
-          {/* Partnerships */}
-          <div id="partnerships">
-            <MaxPartnerships {...maxData.partnerships} />
-          </div>
-
-          {/* Testimonials */}
-          <div id="testimonials">
-            <MaxTestimonials {...maxData.testimonials} />
           </div>
 
           {/* Contact */}

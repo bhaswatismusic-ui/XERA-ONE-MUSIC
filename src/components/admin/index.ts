@@ -1,0 +1,1 @@
+export { MaxAdminPanel } from './MaxAdminPanel';

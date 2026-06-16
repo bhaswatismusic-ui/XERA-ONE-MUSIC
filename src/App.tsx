@@ -6,6 +6,7 @@ import { SuperHeader } from '@/components/layout';
 import { StudiosWorld } from './worlds/studios';
 import { MaxWorld } from './worlds/max';
 import { InfinityWorld } from './worlds/infinity';
+import { MaxAdminPanel } from './components/admin';
 
 function AppContent() {
   const location = useLocation();
@@ -63,6 +64,7 @@ function AppContent() {
           <Route path="/" element={<Navigate to="/max" replace />} />
           <Route path="/studios/*" element={<StudiosWorld />} />
           <Route path="/max/*" element={<MaxWorld />} />
+          <Route path="/max-admin" element={<MaxAdminPanel />} />
           <Route path="/infinity/*" element={<InfinityWorld />} />
           <Route path="*" element={<Navigate to="/max" replace />} />
         </Routes>

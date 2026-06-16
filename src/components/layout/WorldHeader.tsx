@@ -106,13 +106,12 @@ const studiosSections = [
   { id: 'connect', label: 'Connect' },
 ];
 
-// Max: About, Blog, Merch, Growth, Partnerships, Contact
+// Max: About, Portfolio, Testimonials, Merch, Contact
 const maxSections = [
   { id: 'about', label: 'About' },
-  { id: 'blog', label: 'Blog' },
+  { id: 'portfolio', label: 'Portfolio' },
+  { id: 'testimonials', label: 'Testimonials' },
   { id: 'merch', label: 'Merch' },
-  { id: 'growth', label: 'Growth' },
-  { id: 'partnerships', label: 'Partnerships' },
   { id: 'contact', label: 'Contact' },
 ];
 

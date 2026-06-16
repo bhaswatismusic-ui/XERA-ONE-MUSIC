@@ -84,7 +84,20 @@ export function StudiosHero({
           >
             <a
               href={cta.primary.href}
-              className="inline-flex items-center gap-2 px-8 py-4 text-lg font-semibold text-white bg-studios-primary rounded-lg hover:bg-studios-secondary transition-colors"
+              className="group inline-flex items-center gap-2 px-8 py-4 text-lg font-semibold text-black bg-white rounded-lg transition-all duration-300"
+              style={{ boxShadow: '0 0 20px rgba(255,255,255,0.5), 0 0 40px rgba(255,255,255,0.2)' }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget;
+                el.style.background = '#ff2020';
+                el.style.color = '#ffffff';
+                el.style.boxShadow = '0 0 20px rgba(255,32,32,0.7), 0 0 40px rgba(255,32,32,0.4), 0 0 60px rgba(255,32,32,0.2)';
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget;
+                el.style.background = '#ffffff';
+                el.style.color = '#000000';
+                el.style.boxShadow = '0 0 20px rgba(255,255,255,0.5), 0 0 40px rgba(255,255,255,0.2)';
+              }}
             >
               {cta.primary.label}
               <ArrowRight className="w-5 h-5" />
@@ -92,7 +105,20 @@ export function StudiosHero({
 
             <a
               href={cta.secondary.href}
-              className="inline-flex items-center gap-2 px-8 py-4 text-lg font-semibold text-white border-2 border-white/30 rounded-lg hover:bg-white/10 transition-colors"
+              className="inline-flex items-center gap-2 px-8 py-4 text-lg font-semibold text-black bg-white rounded-lg transition-all duration-300"
+              style={{ boxShadow: '0 0 20px rgba(255,255,255,0.5), 0 0 40px rgba(255,255,255,0.2)' }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget;
+                el.style.background = '#ff2020';
+                el.style.color = '#ffffff';
+                el.style.boxShadow = '0 0 20px rgba(255,32,32,0.7), 0 0 40px rgba(255,32,32,0.4), 0 0 60px rgba(255,32,32,0.2)';
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget;
+                el.style.background = '#ffffff';
+                el.style.color = '#000000';
+                el.style.boxShadow = '0 0 20px rgba(255,255,255,0.5), 0 0 40px rgba(255,255,255,0.2)';
+              }}
             >
               {cta.secondary.label}
             </a>

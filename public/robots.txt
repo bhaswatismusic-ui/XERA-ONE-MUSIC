@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://x-era.one/sitemap.xml
+
+Disallow: /max-admin
+Disallow: /api/

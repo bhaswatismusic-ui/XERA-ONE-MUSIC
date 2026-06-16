@@ -7,21 +7,92 @@
     <meta name="theme-color" content="#0a0a0a" />
     <meta name="color-scheme" content="dark" />
 
-    <title>X-ERA ONE | Enter the Digital Frontier</title>
-    <meta name="description" content="X-ERA ONE - A premium immersive digital universe where creativity meets technology. Explore three distinct worlds, each offering unique experiences and boundless possibilities." />
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()" />
+
+    <!-- Primary SEO -->
+    <title>X-ERA ONE | Creative Studios, Digital Media & AI Solutions</title>
+    <meta name="description" content="X-ERA ONE is a premium digital universe uniting X-ERA Studios (creative production), X-ERA Max (content amplification), and X-ERA Infinity (AI & automation). Transform your brand with world-class media." />
+    <meta name="keywords" content="X-ERA, X-ERA Studios, X-ERA Max, X-ERA Infinity, creative production, video production, content creation, digital media, brand storytelling, AI solutions, content distribution, media agency, creative agency, brand strategy, social media marketing, YouTube production, documentary filmmaking, commercial production, automation, content amplification" />
+    <meta name="author" content="X-ERA ONE" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow" />
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://x-era.one/" />
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="X-ERA ONE | Enter the Digital Frontier" />
-    <meta property="og:description" content="A premium immersive digital universe where creativity meets technology. Explore three distinct worlds." />
+    <meta property="og:title" content="X-ERA ONE | Creative Studios, Digital Media & AI Solutions" />
+    <meta property="og:description" content="X-ERA ONE is a premium digital universe uniting X-ERA Studios (creative production), X-ERA Max (content amplification), and X-ERA Infinity (AI & automation). Transform your brand with world-class media." />
     <meta property="og:image" content="/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="X-ERA ONE — Enter the Digital Frontier" />
     <meta property="og:site_name" content="X-ERA ONE" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:url" content="https://x-era.one/" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="X-ERA ONE | Enter the Digital Frontier" />
-    <meta name="twitter:description" content="A premium immersive digital universe where creativity meets technology." />
+    <meta name="twitter:site" content="@xeraone" />
+    <meta name="twitter:creator" content="@xeraone" />
+    <meta name="twitter:title" content="X-ERA ONE | Creative Studios, Digital Media & AI Solutions" />
+    <meta name="twitter:description" content="A premium digital universe where creativity meets technology. Explore X-ERA Studios, Max & Infinity." />
     <meta name="twitter:image" content="/og-image.jpg" />
+    <meta name="twitter:image:alt" content="X-ERA ONE — Enter the Digital Frontier" />
+
+    <!-- Structured Data: Organization -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://x-era.one/#organization",
+          "name": "X-ERA ONE",
+          "url": "https://x-era.one",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://x-era.one/logo.png",
+            "width": 200,
+            "height": 60
+          },
+          "description": "A premium digital universe uniting creative production, content amplification, and AI-driven automation.",
+          "sameAs": [
+            "https://twitter.com/xeraone",
+            "https://instagram.com/xeraone",
+            "https://youtube.com/@xeraone",
+            "https://linkedin.com/company/x-era"
+          ],
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "customer service",
+            "availableLanguage": "English"
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://x-era.one/#website",
+          "url": "https://x-era.one",
+          "name": "X-ERA ONE",
+          "description": "Creative Studios, Digital Media & AI Solutions",
+          "publisher": {
+            "@id": "https://x-era.one/#organization"
+          },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://x-era.one/?s={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        }
+      ]
+    }
+    </script>
 
     <!-- Fonts preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -29,11 +100,13 @@
 
     <!-- iOS PWA Meta Tags -->
     <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="X-ERA ONE" />
 
-    <!-- Theme Color for browsers -->
+    <!-- Windows / Browser -->
     <meta name="msapplication-TileColor" content="#0a0a0a" />
+    <meta name="format-detection" content="telephone=no" />
   </head>
   <body class="bg-neutral-950">
     <div id="root"></div>

@@ -257,8 +257,28 @@ export const universeSEO: SchemaOrganization = {
   url: 'https://x-era.one',
   logo: 'https://x-era.one/logo.png',
   sameAs: [
+    'https://twitter.com/xeraone',
+    'https://instagram.com/xeraone',
+    'https://youtube.com/@xeraone',
     'https://linkedin.com/company/x-era',
-    'https://twitter.com/xera',
+  ],
+};
+
+const worldKeywords: Record<string, string[]> = {
+  studios: [
+    'X-ERA Studios', 'creative production', 'video production', 'brand storytelling',
+    'documentary filmmaking', 'commercial production', 'brand strategy',
+    'creative agency', 'media production', 'cinematic content',
+  ],
+  max: [
+    'X-ERA Max', 'content amplification', 'digital media', 'content distribution',
+    'YouTube strategy', 'social media marketing', 'content creator platform',
+    'audience growth', 'monetization', 'digital brand', 'media analytics',
+  ],
+  infinity: [
+    'X-ERA Infinity', 'AI solutions', 'automation', 'AI research',
+    'machine learning', 'intelligent automation', 'data-driven strategy',
+    'AI agency', 'workflow automation', 'technology innovation',
   ],
 };
 
@@ -272,36 +292,45 @@ export function createWorldSEO(
       '@context': 'https://schema.org',
       '@type': 'Organization',
       name: 'X-ERA Studios',
-      description: 'Creative storytelling and media production',
+      description: 'Creative storytelling, cinematic production, and brand media',
       url: 'https://x-era.one/studios',
-      sameAs: [],
+      sameAs: ['https://instagram.com/xerastudios'],
     },
     max: {
       '@context': 'https://schema.org',
       '@type': 'Organization',
       name: 'X-ERA Max',
-      description: 'Digital media and content distribution',
+      description: 'Digital media amplification, content distribution and creator monetization',
       url: 'https://x-era.one/max',
-      sameAs: [],
+      sameAs: ['https://youtube.com/@xeramax'],
     },
     infinity: {
       '@context': 'https://schema.org',
       '@type': 'Organization',
       name: 'X-ERA Infinity',
-      description: 'AI research and automation solutions',
+      description: 'AI research, intelligent automation and data-driven solutions',
       url: 'https://x-era.one/infinity',
       sameAs: [],
     },
   };
 
+  const breadcrumb: SchemaBreadcrumb = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://x-era.one' },
+      { '@type': 'ListItem', position: 2, name: worldName, item: `https://x-era.one/${worldId}` },
+    ],
+  };
+
   return {
-    title: `${worldName} | X-ERA ONE`,
+    title: `${worldName} | X-ERA ONE — ${worldDescription.slice(0, 50)}`,
     description: worldDescription,
     canonical: `https://x-era.one/${worldId}`,
     ogType: 'website',
     siteName: 'X-ERA ONE',
-    keywords: [worldName, 'X-ERA', worldId, ...worldDescription.split(' ').slice(0, 10)],
-    jsonLd: [universeSEO, worldSchemas[worldId]],
+    keywords: ['X-ERA ONE', worldName, ...worldKeywords[worldId]],
+    jsonLd: [universeSEO, worldSchemas[worldId], breadcrumb],
   };
 }
 

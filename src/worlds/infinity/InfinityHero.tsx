@@ -107,8 +107,20 @@ export function InfinityHero({
           >
             <a
               href={cta.primary.href}
-              className="inline-flex items-center gap-2 px-8 py-4 text-lg font-semibold text-black rounded-lg transition-colors"
-              style={{ backgroundColor: '#39FF88' }}
+              className="inline-flex items-center gap-2 px-8 py-4 text-lg font-semibold text-black bg-white rounded-lg transition-all duration-300"
+              style={{ boxShadow: '0 0 20px rgba(255,255,255,0.5), 0 0 40px rgba(255,255,255,0.2)' }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget;
+                el.style.background = '#00ff6a';
+                el.style.color = '#000000';
+                el.style.boxShadow = '0 0 20px rgba(0,255,106,0.7), 0 0 40px rgba(0,255,106,0.4), 0 0 60px rgba(0,255,106,0.2)';
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget;
+                el.style.background = '#ffffff';
+                el.style.color = '#000000';
+                el.style.boxShadow = '0 0 20px rgba(255,255,255,0.5), 0 0 40px rgba(255,255,255,0.2)';
+              }}
             >
               {cta.primary.label}
               <ArrowRight className="w-5 h-5" />
@@ -116,7 +128,20 @@ export function InfinityHero({
 
             <a
               href={cta.secondary.href}
-              className="inline-flex items-center gap-2 px-8 py-4 text-lg font-semibold text-white border-2 border-white/30 rounded-lg hover:bg-white/10 transition-colors"
+              className="inline-flex items-center gap-2 px-8 py-4 text-lg font-semibold text-black bg-white rounded-lg transition-all duration-300"
+              style={{ boxShadow: '0 0 20px rgba(255,255,255,0.5), 0 0 40px rgba(255,255,255,0.2)' }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget;
+                el.style.background = '#00ff6a';
+                el.style.color = '#000000';
+                el.style.boxShadow = '0 0 20px rgba(0,255,106,0.7), 0 0 40px rgba(0,255,106,0.4), 0 0 60px rgba(0,255,106,0.2)';
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget;
+                el.style.background = '#ffffff';
+                el.style.color = '#000000';
+                el.style.boxShadow = '0 0 20px rgba(255,255,255,0.5), 0 0 40px rgba(255,255,255,0.2)';
+              }}
             >
               {cta.secondary.label}
             </a>

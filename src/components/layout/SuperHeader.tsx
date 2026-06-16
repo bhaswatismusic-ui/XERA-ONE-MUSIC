@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useUniverseStore } from '@/store';
 import type { WorldId } from '@/types';
@@ -8,6 +8,14 @@ const worlds: { id: WorldId; name: string; color: string }[] = [
   { id: 'max', name: 'MAX', color: '#00d4ff' },
   { id: 'infinity', name: 'INFINITY', color: '#00ff6a' },
 ];
+
+const getActiveTabStyle = (color: string): React.CSSProperties => ({
+  color: '#ffffff',
+  background: 'rgba(255,255,255,0.06)',
+  border: `2px solid ${color}`,
+  boxShadow: `0 0 16px ${color}80, 0 0 32px ${color}40, inset 0 0 12px ${color}15`,
+  textShadow: `0 0 10px ${color}cc, 0 0 20px ${color}80`,
+});
 
 export function SuperHeader() {
   const navigate = useNavigate();
@@ -59,33 +67,22 @@ export function SuperHeader() {
                     key={world.id}
                     onClick={() => handleWorldSelect(world.id)}
                     className="relative px-5 py-2 text-xs font-semibold tracking-widest uppercase transition-all duration-300 rounded-lg"
-                    style={{
-                      color: isActive ? '#ffffff' : 'rgba(255,255,255,0.4)',
-                    }}
-                    whileHover={{ scale: 1.03 }}
+                    style={
+                      isActive
+                        ? getActiveTabStyle(world.color)
+                        : { color: 'rgba(255,255,255,0.4)', border: '2px solid transparent' }
+                    }
+                    whileHover={
+                      !isActive
+                        ? {
+                            scale: 1.03,
+                            color: '#ffffff',
+                            borderColor: `${world.color}60`,
+                          }
+                        : { scale: 1.03 }
+                    }
                     whileTap={{ scale: 0.97 }}
                   >
-                    {/* Active indicator */}
-                    <AnimatePresence>
-                      {isActive && (
-                        <motion.div
-                          layoutId="activeWorld"
-                          className="absolute inset-0 rounded-lg"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.25 }}
-                          style={{
-                            background: 'rgba(255,255,255,0.08)',
-                            border: '1px solid rgba(255,255,255,0.15)',
-                          }}
-                        />
-                      )}
-                    </AnimatePresence>
-
-                    {/* Hover layer */}
-                    <div className="absolute inset-0 rounded-lg opacity-0 hover:opacity-100 transition-opacity duration-200 bg-white/5" />
-
                     <span className="relative z-10">{world.name}</span>
                   </motion.button>
                 );

@@ -7,3 +7,5 @@ export { StatsSection } from './StatsSection';
 export { CTASection } from './CTASection';
 export { WorldHeader, StudiosHeader, MaxHeader, InfinityHeader } from './WorldHeader';
 export { SuperHeader } from './SuperHeader';
+export { SocialConnect } from './SocialConnect';
+export { WorldFooter } from './WorldFooter';

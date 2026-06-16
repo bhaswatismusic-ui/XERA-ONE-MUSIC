@@ -1,22 +1,28 @@
 // ============================================
 // Studios World - Main Component
-// Removed: About (per user request)
-// Combined: FAQ + Contact + Quote -> Connect
+// Sections: Hero, Get a Quote + FAQ, Social, Footer
 // ============================================
 
 import { CinematicBackground } from '@/components/effects';
 import { StudiosHeader } from '@/components/layout';
 import { SEO, createWorldSEO } from '@/components/seo';
+import { SocialConnect } from '@/components/layout/SocialConnect';
+import { WorldFooter } from '@/components/layout/WorldFooter';
 import {
   StudiosHero,
-  StudiosServices,
-  StudiosPortfolio,
-  StudiosProcess,
-  StudiosTeam,
-  StudiosTestimonials,
   StudiosConnect,
 } from './';
 import { studiosData } from '@/data/studios';
+
+const WORLD_COLOR = '#ff2020';
+
+const studiosSocialPlatforms = [
+  { name: 'Instagram', handle: '@xerastudios', url: 'https://instagram.com/xerastudios', color: '#E4405F', description: 'Behind-the-scenes & BTS footage' },
+  { name: 'YouTube', handle: '@XERAStudios', url: 'https://youtube.com/@xerastudios', color: '#FF0000', description: 'Films, showreels & production stories' },
+  { name: 'X / Twitter', handle: '@xerastudios', url: 'https://twitter.com/xerastudios', color: '#ffffff', description: 'Updates, industry thoughts & more' },
+  { name: 'LinkedIn', handle: 'X-ERA Studios', url: 'https://linkedin.com/company/xerastudios', color: '#0A66C2', description: 'Professional network & partnerships' },
+  { name: 'Vimeo', handle: 'xerastudios', url: 'https://vimeo.com/xerastudios', color: '#1AB7EA', description: 'High-quality portfolio & reel' },
+];
 
 export function StudiosWorld() {
   const seoConfig = createWorldSEO(
@@ -27,68 +33,27 @@ export function StudiosWorld() {
 
   return (
     <>
-      {/* SEO */}
       <SEO {...seoConfig} />
-
-      {/* World Header with Navigation */}
       <StudiosHeader />
 
       <div className="relative min-h-screen overflow-hidden bg-black">
-        {/* Cinematic Background */}
         <CinematicBackground worldId="studios" />
 
-        {/* Main Content */}
         <div className="relative z-10 pt-28">
-          {/* Hero Section */}
           <StudiosHero {...studiosData.hero} />
 
-          {/* Services */}
-          <div id="services">
-            <StudiosServices {...studiosData.services} />
+          {/* Get a Quote + FAQ - Combined Connect section */}
+          <div id="connect">
+            <StudiosConnect />
           </div>
 
-          {/* Portfolio */}
-          <div id="portfolio">
-            <StudiosPortfolio {...studiosData.portfolio} />
-          </div>
+          <SocialConnect worldColor={WORLD_COLOR} platforms={studiosSocialPlatforms} />
 
-          {/* Process */}
-          <div id="process">
-            <StudiosProcess {...studiosData.process} />
-          </div>
-
-          {/* Team */}
-          <div id="team">
-            <StudiosTeam {...studiosData.team} />
-          </div>
-
-          {/* Testimonials */}
-          <div id="testimonials">
-            <StudiosTestimonials {...studiosData.testimonials} />
-          </div>
-
-          {/* Connect - Combined FAQ + Contact + Quote */}
-          <StudiosConnect />
-
-          {/* Footer */}
-          <footer className="py-16 border-t" style={{ borderColor: 'rgba(255,32,32,0.2)' }}>
-            <div className="container mx-auto px-4 text-center">
-              <div className="mb-6">
-                <span className="text-2xl font-bold" style={{ color: '#FF2020', textShadow: '0 0 20px rgba(255,32,32,0.5)' }}>
-                  X-ERA Studios
-                </span>
-              </div>
-              <div className="flex justify-center gap-6 mb-8">
-                <a href="#" className="text-white/50 hover:text-white transition-colors">Instagram</a>
-                <a href="#" className="text-white/50 hover:text-white transition-colors">YouTube</a>
-                <a href="#" className="text-white/50 hover:text-white transition-colors">LinkedIn</a>
-                <a href="#" className="text-white/50 hover:text-white transition-colors">Twitter</a>
-              </div>
-              <p className="text-white/50 text-sm">
-                &copy; {new Date().getFullYear()} X-ERA ONE. All rights reserved.
-              </p>
-            </div>
-          </footer>
+          <WorldFooter
+            worldName="STUDIOS"
+            worldColor={WORLD_COLOR}
+            tagline="Cinematic storytelling that moves people. From concept to screen, we craft visual experiences that define brands."
+          />
         </div>
       </div>
     </>

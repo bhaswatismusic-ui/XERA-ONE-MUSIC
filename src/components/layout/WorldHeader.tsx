@@ -96,14 +96,9 @@ export function WorldHeader({ currentWorld, subSections, worldColor }: WorldHead
 // World-Specific Header Exports
 // ============================================
 
-// Studios: Services, Portfolio, Process, Team, Testimonials, Connect (FAQ+Contact+Enquiry)
+// Studios: Quote + FAQ combined in Connect
 const studiosSections = [
-  { id: 'services', label: 'Services' },
-  { id: 'portfolio', label: 'Portfolio' },
-  { id: 'process', label: 'Process' },
-  { id: 'team', label: 'Team' },
-  { id: 'testimonials', label: 'Testimonials' },
-  { id: 'connect', label: 'Connect' },
+  { id: 'connect', label: 'Quote & FAQ' },
 ];
 
 // Max: About, Portfolio, Testimonials, Merch, Contact

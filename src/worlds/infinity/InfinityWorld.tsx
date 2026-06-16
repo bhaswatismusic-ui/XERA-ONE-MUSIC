@@ -1,13 +1,13 @@
 // ============================================
 // Infinity World - Main Component
-// Removed: AI Solutions, Products, Research, Automation
-// Added: Projects (Team, Collaborations, Process)
-// Combined: FAQ + Contact -> Connect
+// Sections: Hero, About, Projects, Testimonials, Social, Connect, Footer
 // ============================================
 
 import { CinematicBackground } from '@/components/effects';
 import { InfinityHeader } from '@/components/layout';
 import { SEO, createWorldSEO } from '@/components/seo';
+import { SocialConnect } from '@/components/layout/SocialConnect';
+import { WorldFooter } from '@/components/layout/WorldFooter';
 import {
   InfinityHero,
   InfinityAbout,
@@ -16,6 +16,17 @@ import {
   InfinityConnect,
 } from './';
 import { infinityData } from '@/data/infinity';
+
+const WORLD_COLOR = '#00ff6a';
+
+const infinitySocialPlatforms = [
+  { name: 'Instagram', handle: '@xerainfinity', url: 'https://instagram.com/xerainfinity', color: '#E4405F', description: 'AI breakthroughs & visual updates' },
+  { name: 'YouTube', handle: '@XERAInfinity', url: 'https://youtube.com/@xerainfinity', color: '#FF0000', description: 'Research talks & tech demos' },
+  { name: 'X / Twitter', handle: '@xerainfinity', url: 'https://twitter.com/xerainfinity', color: '#ffffff', description: 'Hot takes & AI discourse' },
+  { name: 'LinkedIn', handle: 'X-ERA Infinity', url: 'https://linkedin.com/company/xerainfinity', color: '#0A66C2', description: 'Research papers & collaborations' },
+  { name: 'GitHub', handle: 'xerainfinity', url: 'https://github.com/xerainfinity', color: '#ffffff', description: 'Open source projects & tools' },
+  { name: 'Spotify', handle: 'X-ERA Infinity', url: 'https://open.spotify.com', color: '#1DB954', description: 'AI research podcast & talks' },
+];
 
 export function InfinityWorld() {
   const seoConfig = createWorldSEO(
@@ -38,44 +49,27 @@ export function InfinityWorld() {
 
         {/* Main Content */}
         <div className="relative z-10 pt-28">
-          {/* Hero Section */}
           <InfinityHero {...infinityData.hero} />
 
-          {/* About with Social Media */}
           <div id="about">
             <InfinityAbout {...infinityData.about} />
           </div>
 
-          {/* Projects - Team, Collaborations, Process */}
           <InfinityProjects />
 
-          {/* Testimonials */}
           <div id="testimonials">
             <InfinityTestimonials {...infinityData.testimonials} />
           </div>
 
-          {/* Connect - Combined FAQ + Contact */}
+          <SocialConnect worldColor={WORLD_COLOR} platforms={infinitySocialPlatforms} />
+
           <InfinityConnect />
 
-          {/* Footer */}
-          <footer className="py-16 border-t" style={{ borderColor: 'rgba(0, 255, 106, 0.2)' }}>
-            <div className="container mx-auto px-4 text-center">
-              <div className="mb-6">
-                <span className="text-2xl font-bold" style={{ color: '#00ff6a', textShadow: '0 0 20px rgba(0, 255, 106, 0.5)' }}>
-                  X-ERA Infinity
-                </span>
-              </div>
-              <div className="flex justify-center gap-6 mb-8">
-                <a href="#" className="text-white/50 hover:text-white transition-colors">Instagram</a>
-                <a href="#" className="text-white/50 hover:text-white transition-colors">YouTube</a>
-                <a href="#" className="text-white/50 hover:text-white transition-colors">LinkedIn</a>
-                <a href="#" className="text-white/50 hover:text-white transition-colors">Twitter</a>
-              </div>
-              <p className="text-white/50 text-sm">
-                &copy; {new Date().getFullYear()} X-ERA ONE. All rights reserved.
-              </p>
-            </div>
-          </footer>
+          <WorldFooter
+            worldName="INFINITY"
+            worldColor={WORLD_COLOR}
+            tagline="Pushing the boundaries of intelligent systems, machine learning, and automation."
+          />
         </div>
       </div>
     </>

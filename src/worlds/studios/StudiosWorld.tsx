@@ -1,6 +1,7 @@
 // ============================================
 // Studios World - Main Component
-// Sections: Hero, Get a Quote + FAQ, Social, Footer
+// Sections: Hero, Services, Portfolio, Process, Team, Testimonials, Social, Connect, Footer
+// Red neon glow styling
 // ============================================
 
 import { CinematicBackground } from '@/components/effects';
@@ -10,11 +11,16 @@ import { SocialConnect } from '@/components/layout/SocialConnect';
 import { WorldFooter } from '@/components/layout/WorldFooter';
 import {
   StudiosHero,
+  StudiosServices,
+  StudiosPortfolio,
+  StudiosProcess,
+  StudiosTeam,
+  StudiosTestimonials,
   StudiosConnect,
 } from './';
 import { studiosData } from '@/data/studios';
 
-const WORLD_COLOR = '#ff2020';
+const WORLD_COLOR = '#ff2020'; // Red neon
 
 const studiosSocialPlatforms = [
   { name: 'Instagram', handle: '@xerastudios', url: 'https://instagram.com/xerastudios', color: '#E4405F', description: 'Behind-the-scenes & BTS footage' },
@@ -40,15 +46,43 @@ export function StudiosWorld() {
         <CinematicBackground worldId="studios" />
 
         <div className="relative z-10 pt-28">
+          {/* Hero Section */}
           <StudiosHero {...studiosData.hero} />
 
-          {/* Get a Quote + FAQ - Combined Connect section */}
+          {/* Services */}
+          <div id="services">
+            <StudiosServices {...studiosData.services} />
+          </div>
+
+          {/* Portfolio */}
+          <div id="portfolio">
+            <StudiosPortfolio {...studiosData.portfolio} />
+          </div>
+
+          {/* Process */}
+          <div id="process">
+            <StudiosProcess {...studiosData.process} />
+          </div>
+
+          {/* Team */}
+          <div id="team">
+            <StudiosTeam {...studiosData.team} />
+          </div>
+
+          {/* Testimonials */}
+          <div id="testimonials">
+            <StudiosTestimonials {...studiosData.testimonials} />
+          </div>
+
+          {/* Social Connect */}
+          <SocialConnect worldColor={WORLD_COLOR} platforms={studiosSocialPlatforms} />
+
+          {/* Connect - Get a Quote + FAQ */}
           <div id="connect">
             <StudiosConnect />
           </div>
 
-          <SocialConnect worldColor={WORLD_COLOR} platforms={studiosSocialPlatforms} />
-
+          {/* Modern Footer */}
           <WorldFooter
             worldName="STUDIOS"
             worldColor={WORLD_COLOR}

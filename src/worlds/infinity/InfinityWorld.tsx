@@ -1,6 +1,7 @@
 // ============================================
 // Infinity World - Main Component
 // Sections: Hero, About, Projects, Testimonials, Social, Connect, Footer
+// Green neon glow styling
 // ============================================
 
 import { CinematicBackground } from '@/components/effects';
@@ -17,7 +18,7 @@ import {
 } from './';
 import { infinityData } from '@/data/infinity';
 
-const WORLD_COLOR = '#00ff6a';
+const WORLD_COLOR = '#00ff6a'; // Green neon
 
 const infinitySocialPlatforms = [
   { name: 'Instagram', handle: '@xerainfinity', url: 'https://instagram.com/xerainfinity', color: '#E4405F', description: 'AI breakthroughs & visual updates' },
@@ -25,7 +26,7 @@ const infinitySocialPlatforms = [
   { name: 'X / Twitter', handle: '@xerainfinity', url: 'https://twitter.com/xerainfinity', color: '#ffffff', description: 'Hot takes & AI discourse' },
   { name: 'LinkedIn', handle: 'X-ERA Infinity', url: 'https://linkedin.com/company/xerainfinity', color: '#0A66C2', description: 'Research papers & collaborations' },
   { name: 'GitHub', handle: 'xerainfinity', url: 'https://github.com/xerainfinity', color: '#ffffff', description: 'Open source projects & tools' },
-  { name: 'Spotify', handle: 'X-ERA Infinity', url: 'https://open.spotify.com', color: '#1DB954', description: 'AI research podcast & talks' },
+  { name: 'Discord', handle: 'X-ERA Infinity', url: 'https://discord.gg/xerainfinity', color: '#5865F2', description: 'Community & developer chat' },
 ];
 
 export function InfinityWorld() {
@@ -37,34 +38,36 @@ export function InfinityWorld() {
 
   return (
     <>
-      {/* SEO */}
       <SEO {...seoConfig} />
-
-      {/* World Header with Navigation */}
       <InfinityHeader />
 
       <div className="relative min-h-screen overflow-hidden bg-black">
-        {/* Cinematic Background */}
         <CinematicBackground worldId="infinity" />
 
-        {/* Main Content */}
         <div className="relative z-10 pt-28">
+          {/* Hero Section */}
           <InfinityHero {...infinityData.hero} />
 
+          {/* About */}
           <div id="about">
             <InfinityAbout {...infinityData.about} />
           </div>
 
+          {/* Projects */}
           <InfinityProjects />
 
+          {/* Testimonials */}
           <div id="testimonials">
             <InfinityTestimonials {...infinityData.testimonials} />
           </div>
 
+          {/* Social Connect */}
           <SocialConnect worldColor={WORLD_COLOR} platforms={infinitySocialPlatforms} />
 
+          {/* Connect - FAQ + Contact */}
           <InfinityConnect />
 
+          {/* Modern Footer */}
           <WorldFooter
             worldName="INFINITY"
             worldColor={WORLD_COLOR}

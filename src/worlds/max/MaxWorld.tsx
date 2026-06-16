@@ -1,6 +1,7 @@
 // ============================================
 // Max World - Main Component
-// Sections: Hero, About, Portfolio, Testimonials, Social, Merch, Contact
+// Sections: Hero, About, Portfolio, Testimonials, Social, Merch, Contact, Footer
+// Cyan neon glow styling
 // ============================================
 
 import { CinematicBackground } from '@/components/effects';
@@ -18,7 +19,16 @@ import {
 } from './';
 import { maxData } from '@/data/max';
 
-const WORLD_COLOR = '#00d4ff';
+const WORLD_COLOR = '#00d4ff'; // Cyan neon
+
+const maxSocialPlatforms = [
+  { name: 'Instagram', handle: '@xeramax', url: 'https://instagram.com/xeramax', color: '#E4405F', description: 'Behind-the-scenes & daily updates' },
+  { name: 'YouTube', handle: '@XERAMax', url: 'https://youtube.com/@xeramax', color: '#FF0000', description: 'Creator tutorials & features' },
+  { name: 'X / Twitter', handle: '@xeramax', url: 'https://twitter.com/xeramax', color: '#ffffff', description: 'News, updates & engagement' },
+  { name: 'LinkedIn', handle: 'X-ERA Max', url: 'https://linkedin.com/company/xeramax', color: '#0A66C2', description: 'Enterprise insights & partnerships' },
+  { name: 'TikTok', handle: '@xeramax', url: 'https://tiktok.com/@xeramax', color: '#ffffff', description: 'Trending content & creators' },
+  { name: 'Spotify', handle: 'X-ERA Max', url: 'https://open.spotify.com', color: '#1DB954', description: 'Creator podcasts & playlists' },
+];
 
 export function MaxWorld() {
   const seoConfig = createWorldSEO(
@@ -29,40 +39,43 @@ export function MaxWorld() {
 
   return (
     <>
-      {/* SEO */}
       <SEO {...seoConfig} />
-
-      {/* World Header with Navigation */}
       <MaxHeader />
 
       <div className="relative min-h-screen overflow-hidden" style={{ background: '#020814' }}>
-        {/* Cinematic Background */}
         <CinematicBackground worldId="max" />
 
-        {/* Main Content */}
         <div className="relative z-10 pt-28">
+          {/* Hero Section */}
           <MaxHero {...maxData.hero} />
 
+          {/* About */}
           <div id="about">
             <MaxAbout />
           </div>
 
+          {/* Portfolio */}
           <div id="portfolio">
             <MaxPortfolio />
           </div>
 
+          {/* Testimonials */}
           <div id="testimonials">
             <MaxTestimonials />
           </div>
 
-          <SocialConnect worldColor={WORLD_COLOR} />
+          {/* Social Connect */}
+          <SocialConnect worldColor={WORLD_COLOR} platforms={maxSocialPlatforms} />
 
+          {/* Merch */}
           <div id="merch">
             <MaxMerch />
           </div>
 
+          {/* Contact */}
           <MaxContact />
 
+          {/* Modern Footer */}
           <WorldFooter
             worldName="MAX"
             worldColor={WORLD_COLOR}

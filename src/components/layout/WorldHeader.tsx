@@ -1,11 +1,10 @@
 // ============================================
 // World Header Component
-// Navigation header for X-ERA worlds with tabs
+// Navigation header for X-ERA worlds with neon glow tabs
 // ============================================
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
 import { cn } from '@/utils';
 
 // ============================================
@@ -26,7 +25,6 @@ export function WorldHeader({ currentWorld, subSections, worldColor }: WorldHead
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
 
-      // Update active section based on scroll position
       for (const section of [...subSections].reverse()) {
         const el = document.getElementById(section.id);
         if (el) {
@@ -50,6 +48,19 @@ export function WorldHeader({ currentWorld, subSections, worldColor }: WorldHead
     }
   };
 
+  // Map world to neon glow colors
+  const getNeonGlow = (color: string, isActive: boolean): React.CSSProperties => {
+    if (!isActive) return {};
+
+    return {
+      backgroundColor: `${color}10`,
+      color: color,
+      border: `1px solid ${color}50`,
+      boxShadow: `0 0 15px ${color}40, 0 0 30px ${color}20, inset 0 0 10px ${color}10`,
+      textShadow: `0 0 8px ${color}80`
+    };
+  };
+
   return (
     <motion.header
       initial={{ y: -20, opacity: 0 }}
@@ -57,35 +68,47 @@ export function WorldHeader({ currentWorld, subSections, worldColor }: WorldHead
       transition={{ duration: 0.5 }}
       className={cn(
         'fixed top-16 left-0 right-0 z-40 transition-all duration-300',
-        scrolled ? 'bg-black/90 backdrop-blur-lg' : 'bg-black/50'
+        scrolled ? 'bg-black/90 backdrop-blur-lg border-b border-white/5' : 'bg-black/60'
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        {/* Sub Navigation - Section Links */}
         <nav
-          className="flex items-center justify-center gap-1 py-3 overflow-x-auto"
+          className="flex items-center justify-center gap-1 py-3 overflow-x-auto scrollbar-hide"
           role="navigation"
           aria-label="Section navigation"
         >
-          {subSections.map((section) => (
-            <button
-              key={section.id}
-              onClick={() => scrollToSection(section.id)}
-              className={cn(
-                'px-4 py-2 text-sm font-medium tracking-wider uppercase rounded-lg transition-all duration-300 whitespace-nowrap',
-                activeSection === section.id
-                  ? 'text-white'
-                  : 'text-white/50 hover:text-white/80 hover:bg-white/5'
-              )}
-              style={{
-                backgroundColor: activeSection === section.id ? `${worldColor}20` : undefined,
-                color: activeSection === section.id ? worldColor : undefined,
-                boxShadow: activeSection === section.id ? `0 0 20px ${worldColor}40` : undefined,
-              }}
-            >
-              {section.label}
-            </button>
-          ))}
+          {subSections.map((section) => {
+            const isActive = activeSection === section.id;
+            return (
+              <motion.button
+                key={section.id}
+                onClick={() => scrollToSection(section.id)}
+                className="px-4 py-2 text-sm font-medium tracking-wider uppercase rounded-lg transition-all duration-300 whitespace-nowrap"
+                style={getNeonGlow(worldColor, isActive)}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                onMouseEnter={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.color = worldColor;
+                    e.currentTarget.style.backgroundColor = `${worldColor}08`;
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.color = 'rgba(255,255,255,0.5)';
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                  }
+                }}
+              >
+                {!isActive && (
+                  <span className="text-white/50 hover:text-white/80 transition-colors">
+                    {section.label}
+                  </span>
+                )}
+                {isActive && section.label}
+              </motion.button>
+            );
+          })}
         </nav>
       </div>
     </motion.header>
@@ -93,12 +116,17 @@ export function WorldHeader({ currentWorld, subSections, worldColor }: WorldHead
 }
 
 // ============================================
-// World-Specific Header Exports
+// World-Specific Header Exports with Sections
 // ============================================
 
-// Studios: Quote + FAQ combined in Connect
+// Studios: Services, Portfolio, Process, Team, Testimonials, Connect
 const studiosSections = [
-  { id: 'connect', label: 'Quote & FAQ' },
+  { id: 'services', label: 'Services' },
+  { id: 'portfolio', label: 'Portfolio' },
+  { id: 'process', label: 'Process' },
+  { id: 'team', label: 'Team' },
+  { id: 'testimonials', label: 'Testimonials' },
+  { id: 'connect', label: 'Connect' },
 ];
 
 // Max: About, Portfolio, Testimonials, Merch, Contact
@@ -118,10 +146,11 @@ const infinitySections = [
   { id: 'connect', label: 'Connect' },
 ];
 
+// World colors with neon glow
 const worldColors = {
-  studios: '#FF2020',
-  max: '#00d4ff',
-  infinity: '#00ff6a',
+  studios: '#ff2020',  // Red neon
+  max: '#00d4ff',      // Cyan neon
+  infinity: '#00ff6a', // Green neon
 };
 
 export function StudiosHeader() {

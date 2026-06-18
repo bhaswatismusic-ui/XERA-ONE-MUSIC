@@ -8,54 +8,7 @@ import { MaxWorld } from './worlds/max';
 import { InfinityWorld } from './worlds/infinity';
 import { MaxAdminPanel } from './components/admin';
 
-function AppContent() {
-  const location = useLocation();
-  const theme = useUniverseStore((state) => state.theme);
-  const reducedMotion = useUniverseStore((state) => state.reducedMotion);
-  const hasEntered = useUniverseStore((state) => state.hasEntered);
-  const enterUniverse = useUniverseStore((state) => state.enterUniverse);
-  const setCurrentWorld = useUniverseStore((state) => state.setCurrentWorld);
-
-  // Get current world from URL path
-  const pathWorld = location.pathname.split('/')[1] as 'studios' | 'max' | 'infinity' | '';
-
-  // Apply theme class to document
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', theme === 'dark');
-  }, [theme]);
-
-  // Check for system reduced motion preference
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (mediaQuery.matches && !reducedMotion) {
-      useUniverseStore.getState().setReducedMotion(true);
-    }
-
-    const handleChange = (e: MediaQueryListEvent) => {
-      useUniverseStore.getState().setReducedMotion(e.matches);
-    };
-
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, [reducedMotion]);
-
-  // Update current world based on URL
-  useEffect(() => {
-    if (hasEntered && (pathWorld === 'studios' || pathWorld === 'max' || pathWorld === 'infinity')) {
-      setCurrentWorld(pathWorld);
-    }
-  }, [pathWorld, hasEntered, setCurrentWorld]);
-
-  // Handle buffer loading complete
-  const handleLoadingComplete = () => {
-    enterUniverse();
-  };
-
-  // Show buffer loader if hasn't entered
-  if (!hasEntered) {
-    return <BufferLoader onComplete={handleLoadingComplete} />;
-  }
-
+function MainApp() {
   return (
     <div className="min-h-screen bg-black text-white">
       <SuperHeader />
@@ -70,6 +23,51 @@ function AppContent() {
         </Routes>
       </main>
     </div>
+  );
+}
+
+function AppContent() {
+  const location = useLocation();
+  const theme = useUniverseStore((state) => state.theme);
+  const reducedMotion = useUniverseStore((state) => state.reducedMotion);
+  const hasEntered = useUniverseStore((state) => state.hasEntered);
+  const enterUniverse = useUniverseStore((state) => state.enterUniverse);
+  const setCurrentWorld = useUniverseStore((state) => state.setCurrentWorld);
+
+  const pathWorld = location.pathname.split('/')[1] as 'studios' | 'max' | 'infinity' | '';
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+  }, [theme]);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (mediaQuery.matches && !reducedMotion) {
+      useUniverseStore.getState().setReducedMotion(true);
+    }
+    const handleChange = (e: MediaQueryListEvent) => {
+      useUniverseStore.getState().setReducedMotion(e.matches);
+    };
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, [reducedMotion]);
+
+  useEffect(() => {
+    if (hasEntered && (pathWorld === 'studios' || pathWorld === 'max' || pathWorld === 'infinity')) {
+      setCurrentWorld(pathWorld);
+    }
+  }, [pathWorld, hasEntered, setCurrentWorld]);
+
+  return (
+    <>
+      {/* Main site always mounted — loader overlays it via fixed positioning */}
+      <MainApp />
+
+      {/* Overlay loader — curtains reveal the site beneath on completion */}
+      {!hasEntered && (
+        <BufferLoader onComplete={enterUniverse} />
+      )}
+    </>
   );
 }
 

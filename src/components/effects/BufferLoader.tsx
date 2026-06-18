@@ -1,215 +1,207 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface BufferLoaderProps {
   onComplete: () => void;
 }
 
+// Stable random values generated once so they don't re-randomise on re-render
+const PARTICLES = Array.from({ length: 28 }, (_, i) => ({
+  id: i,
+  x: Math.random() * 100,
+  y: Math.random() * 100,
+  size: Math.random() * 2 + 1,
+  dur: Math.random() * 4 + 3,
+  delay: Math.random() * 2,
+}));
+
 export function BufferLoader({ onComplete }: BufferLoaderProps) {
   const [progress, setProgress] = useState(0);
-  const [bufferWidth, setBufferWidth] = useState(0);
   const [curtainsOpen, setCurtainsOpen] = useState(false);
-  const [done, setDone] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
 
-  // Drive the progress bar forward
+  // Animate progress 0 → 100 over ~2.4 s
   useEffect(() => {
-    const bufferInterval = setInterval(() => {
-      setBufferWidth((prev) => {
-        if (prev >= 100) {
-          clearInterval(bufferInterval);
-          return 100;
-        }
-        return prev + Math.random() * 15 + 5;
-      });
-    }, 100);
+    const start = Date.now();
+    const duration = 2400;
+    let raf: number;
 
-    return () => clearInterval(bufferInterval);
+    const tick = () => {
+      const elapsed = Date.now() - start;
+      const raw = Math.min(elapsed / duration, 1);
+      // ease-out cubic
+      const eased = 1 - Math.pow(1 - raw, 3);
+      setProgress(Math.round(eased * 100));
+      if (raw < 1) {
+        raf = requestAnimationFrame(tick);
+      } else {
+        // Brief pause then open the curtains
+        setTimeout(() => setCurtainsOpen(true), 350);
+      }
+    };
+
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
   }, []);
 
+  // After curtains fully open, signal completion and unmount
   useEffect(() => {
-    const progressInterval = setInterval(() => {
-      setProgress((prev) => {
-        const target = Math.min(bufferWidth, 100);
-        if (prev >= target) return prev;
-        return prev + Math.random() * 8 + 2;
-      });
-    }, 50);
+    if (!curtainsOpen) return;
+    const t = setTimeout(() => {
+      setHidden(true);
+      onCompleteRef.current();
+    }, 1300); // matches curtain transition duration
+    return () => clearTimeout(t);
+  }, [curtainsOpen]);
 
-    return () => clearInterval(progressInterval);
-  }, [bufferWidth]);
-
-  // Once 100 % is hit, trigger the curtains after a short pause
-  useEffect(() => {
-    if (progress >= 100 && bufferWidth >= 100 && !curtainsOpen) {
-      const t = setTimeout(() => {
-        setCurtainsOpen(true);
-      }, 400);
-      return () => clearTimeout(t);
-    }
-  }, [progress, bufferWidth, curtainsOpen]);
-
-  // Fire onComplete after curtain animation completes (1.2 s)
-  useEffect(() => {
-    if (curtainsOpen) {
-      const t = setTimeout(() => {
-        setDone(true);
-        onComplete();
-      }, 1200);
-      return () => clearTimeout(t);
-    }
-  }, [curtainsOpen, onComplete]);
-
-  if (done) return null;
+  if (hidden) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden">
-      {/* ── Particles ─────────────────────────────────────── */}
-      <div className="absolute inset-0 bg-black overflow-hidden">
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-white/30 rounded-full"
-            initial={{
-              x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1440),
-              y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 900),
-            }}
-            animate={{ y: [null, Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 900)], opacity: [0.2, 0.6, 0.2] }}
-            transition={{ duration: Math.random() * 3 + 2, repeat: Infinity, ease: 'linear' }}
-          />
-        ))}
-      </div>
+    <div className="fixed inset-0 z-[100] overflow-hidden pointer-events-none">
+      {/* ── Left curtain panel ──────────────────────────────────── */}
+      <motion.div
+        className="absolute top-0 left-0 w-1/2 h-full pointer-events-auto"
+        initial={{ x: 0 }}
+        animate={curtainsOpen ? { x: '-100%' } : { x: 0 }}
+        transition={{ duration: 1.15, ease: [0.76, 0, 0.24, 1] }}
+        style={{ background: 'linear-gradient(135deg, #050505 0%, #0c0c12 100%)' }}
+      >
+        {/* Neon seam — right edge of left panel */}
+        <motion.div
+          className="absolute top-0 right-0 w-[2px] h-full"
+          animate={curtainsOpen ? { opacity: 0 } : { opacity: [0.4, 1, 0.4] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          style={{
+            background: 'linear-gradient(to bottom, transparent 0%, #00d4ff 30%, #ff2020 60%, #00ff6a 85%, transparent 100%)',
+          }}
+        />
+      </motion.div>
 
-      {/* ── Loader content (hidden once curtains start) ─── */}
+      {/* ── Right curtain panel ─────────────────────────────────── */}
+      <motion.div
+        className="absolute top-0 right-0 w-1/2 h-full pointer-events-auto"
+        initial={{ x: 0 }}
+        animate={curtainsOpen ? { x: '100%' } : { x: 0 }}
+        transition={{ duration: 1.15, ease: [0.76, 0, 0.24, 1] }}
+        style={{ background: 'linear-gradient(225deg, #050505 0%, #0c0c12 100%)' }}
+      >
+        {/* Neon seam — left edge of right panel */}
+        <motion.div
+          className="absolute top-0 left-0 w-[2px] h-full"
+          animate={curtainsOpen ? { opacity: 0 } : { opacity: [0.4, 1, 0.4] }}
+          transition={{ duration: 2, repeat: Infinity, delay: 0.3 }}
+          style={{
+            background: 'linear-gradient(to bottom, transparent 0%, #00ff6a 30%, #00d4ff 60%, #ff2020 85%, transparent 100%)',
+          }}
+        />
+      </motion.div>
+
+      {/* ── Welcome content — sits above both panels ────────────── */}
       <AnimatePresence>
         {!curtainsOpen && (
           <motion.div
-            key="loader"
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="absolute inset-0 flex flex-col items-center justify-center z-10 px-8"
+            key="welcome"
+            className="absolute inset-0 flex flex-col items-center justify-center z-10 pointer-events-none select-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, scale: 0.96 }}
+            transition={{ duration: 0.35 }}
           >
-            {/* Corner accents */}
-            <div className="absolute top-8 left-8 w-16 h-16 border-l-2 border-t-2 border-white/20" />
-            <div className="absolute top-8 right-8 w-16 h-16 border-r-2 border-t-2 border-white/20" />
-            <div className="absolute bottom-8 left-8 w-16 h-16 border-l-2 border-b-2 border-white/20" />
-            <div className="absolute bottom-8 right-8 w-16 h-16 border-r-2 border-b-2 border-white/20" />
+            {/* Floating particles */}
+            {PARTICLES.map((p) => (
+              <motion.div
+                key={p.id}
+                className="absolute rounded-full bg-white/25"
+                style={{
+                  left: `${p.x}%`,
+                  top: `${p.y}%`,
+                  width: p.size,
+                  height: p.size,
+                }}
+                animate={{ y: [0, -30, 0], opacity: [0.15, 0.5, 0.15] }}
+                transition={{ duration: p.dur, repeat: Infinity, delay: p.delay, ease: 'easeInOut' }}
+              />
+            ))}
 
-            {/* Title */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="text-center mb-12"
-            >
+            {/* Corner brackets */}
+            <div className="absolute top-8 left-8 w-14 h-14 border-l-2 border-t-2 border-white/15 rounded-tl" />
+            <div className="absolute top-8 right-8 w-14 h-14 border-r-2 border-t-2 border-white/15 rounded-tr" />
+            <div className="absolute bottom-8 left-8 w-14 h-14 border-l-2 border-b-2 border-white/15 rounded-bl" />
+            <div className="absolute bottom-8 right-8 w-14 h-14 border-r-2 border-b-2 border-white/15 rounded-br" />
+
+            {/* Text block */}
+            <div className="text-center px-6">
+              {/* "WELCOME TO" */}
               <motion.p
-                className="text-white/60 text-sm md:text-base tracking-[0.3em] uppercase mb-4"
-                animate={{ opacity: [0.5, 1, 0.5] }}
-                transition={{ duration: 2, repeat: Infinity }}
+                className="text-xs md:text-sm tracking-[0.45em] uppercase text-white/50 mb-5"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.2 }}
               >
                 Welcome to
               </motion.p>
 
-              {/* Neon X-ERA-ONE */}
+              {/* X-ERA ONE — cycling neon */}
               <motion.h1
-                className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-wider"
-                style={{
-                  color: '#ffffff',
-                  textShadow:
-                    '0 0 10px #00d4ff, 0 0 20px #00d4ff, 0 0 40px #00d4ff, 0 0 80px rgba(0,212,255,0.4)',
-                }}
+                className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-widest text-white"
+                initial={{ opacity: 0, y: 16 }}
                 animate={{
+                  opacity: 1,
+                  y: 0,
                   textShadow: [
-                    '0 0 10px #00d4ff, 0 0 20px #00d4ff, 0 0 40px #00d4ff, 0 0 80px rgba(0,212,255,0.4)',
-                    '0 0 15px #ff2020, 0 0 30px #ff2020, 0 0 60px #ff2020, 0 0 100px rgba(255,32,32,0.4)',
-                    '0 0 10px #00ff6a, 0 0 20px #00ff6a, 0 0 40px #00ff6a, 0 0 80px rgba(0,255,106,0.4)',
-                    '0 0 10px #00d4ff, 0 0 20px #00d4ff, 0 0 40px #00d4ff, 0 0 80px rgba(0,212,255,0.4)',
+                    '0 0 12px #00d4ff, 0 0 28px #00d4ff, 0 0 56px rgba(0,212,255,0.5)',
+                    '0 0 12px #ff2020, 0 0 28px #ff2020, 0 0 56px rgba(255,32,32,0.5)',
+                    '0 0 12px #00ff6a, 0 0 28px #00ff6a, 0 0 56px rgba(0,255,106,0.5)',
+                    '0 0 12px #00d4ff, 0 0 28px #00d4ff, 0 0 56px rgba(0,212,255,0.5)',
                   ],
                 }}
-                transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+                transition={{
+                  opacity: { duration: 0.7, delay: 0.4 },
+                  y: { duration: 0.7, delay: 0.4 },
+                  textShadow: { duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 0.8 },
+                }}
               >
-                X-ERA-ONE
+                X-ERA ONE
               </motion.h1>
 
+              {/* UNIVERSE */}
               <motion.p
-                className="text-2xl md:text-3xl lg:text-4xl font-light text-white/80 mt-2 tracking-widest"
+                className="text-lg md:text-2xl lg:text-3xl font-light tracking-[0.5em] text-white/70 mt-3"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.3, duration: 0.8 }}
+                transition={{ duration: 0.7, delay: 0.65 }}
               >
                 UNIVERSE
               </motion.p>
-            </motion.div>
 
-            {/* Progress bar */}
-            <div className="w-64 md:w-96 h-1 relative mb-4">
-              <div className="absolute inset-0 bg-white/10 rounded-full overflow-hidden">
-                <div
-                  className="absolute h-full bg-white/20 rounded-full transition-all duration-100"
-                  style={{ width: `${Math.min(bufferWidth, 100)}%` }}
-                />
-                <motion.div
-                  className="absolute h-full rounded-full"
-                  style={{
-                    background: 'linear-gradient(90deg, #00d4ff, #ffffff)',
-                    boxShadow: '0 0 12px rgba(0,212,255,0.8)',
-                  }}
-                  animate={{ width: `${Math.min(progress, 100)}%` }}
-                  transition={{ duration: 0.1 }}
-                />
-              </div>
+              {/* Progress bar */}
+              <motion.div
+                className="mt-12 w-56 md:w-80 mx-auto"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.9 }}
+              >
+                <div className="relative h-[2px] bg-white/10 rounded-full overflow-hidden">
+                  <motion.div
+                    className="absolute inset-y-0 left-0 rounded-full"
+                    style={{
+                      background: 'linear-gradient(90deg, #00d4ff, #ffffff)',
+                      boxShadow: '0 0 10px rgba(0,212,255,0.9)',
+                    }}
+                    animate={{ width: `${progress}%` }}
+                    transition={{ duration: 0.08, ease: 'linear' }}
+                  />
+                </div>
+                <p className="mt-3 text-center text-xs tracking-[0.3em] text-white/35">
+                  {progress}%
+                </p>
+              </motion.div>
             </div>
-
-            <p className="text-white/50 text-sm tracking-widest">
-              {Math.min(Math.round(progress), 100)}%
-            </p>
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* ── Left curtain ────────────────────────────────── */}
-      <motion.div
-        className="absolute top-0 left-0 w-1/2 h-full z-20"
-        style={{
-          background: 'linear-gradient(to right, #000000, #0a0a0a)',
-          originX: 0,
-        }}
-        animate={curtainsOpen ? { x: '-100%' } : { x: '0%' }}
-        transition={{ duration: 1.1, ease: [0.76, 0, 0.24, 1] }}
-      >
-        {/* Inner edge glow */}
-        <div
-          className="absolute top-0 right-0 w-1 h-full"
-          style={{
-            background: curtainsOpen
-              ? 'none'
-              : 'linear-gradient(to bottom, transparent, #00d4ff, #ff2020, #00ff6a, transparent)',
-            opacity: 0.6,
-          }}
-        />
-      </motion.div>
-
-      {/* ── Right curtain ───────────────────────────────── */}
-      <motion.div
-        className="absolute top-0 right-0 w-1/2 h-full z-20"
-        style={{
-          background: 'linear-gradient(to left, #000000, #0a0a0a)',
-          originX: 1,
-        }}
-        animate={curtainsOpen ? { x: '100%' } : { x: '0%' }}
-        transition={{ duration: 1.1, ease: [0.76, 0, 0.24, 1] }}
-      >
-        {/* Inner edge glow */}
-        <div
-          className="absolute top-0 left-0 w-1 h-full"
-          style={{
-            background: curtainsOpen
-              ? 'none'
-              : 'linear-gradient(to bottom, transparent, #ff2020, #00d4ff, #00ff6a, transparent)',
-            opacity: 0.6,
-          }}
-        />
-      </motion.div>
     </div>
   );
 }

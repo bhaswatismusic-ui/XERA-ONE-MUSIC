@@ -1,8 +1,3 @@
-// ============================================
-// Studios World - Main Component
-// SmokeBackground (red) covers the entire page
-// ============================================
-
 import { SmokeBackground } from '@/components/ui/smoke-background';
 import { StudiosHeader } from '@/components/layout';
 import { SEO, createWorldSEO } from '@/components/seo';
@@ -20,7 +15,6 @@ import {
 import { studiosData } from '@/data/studios';
 
 const WORLD_COLOR = '#ff2020';
-const STUDIOS_SMOKE_COLOR = '#8B0000'; // Deep red smoke
 
 const studiosSocialPlatforms = [
   { name: 'Instagram', handle: '@xerastudios', url: 'https://instagram.com/xerastudios', color: '#E4405F', description: 'Behind-the-scenes & BTS footage' },
@@ -40,47 +34,28 @@ export function StudiosWorld() {
   return (
     <>
       <SEO {...seoConfig} />
-      <StudiosHeader />
 
-      {/* Red smoke shader — fixed canvas behind everything */}
-      <SmokeBackground smokeColor={STUDIOS_SMOKE_COLOR} />
+      {/* Deep crimson smoke — fixed canvas, z-index 0 */}
+      <SmokeBackground smokeColor="#8B0000" />
 
-      <div className="relative min-h-screen overflow-hidden" style={{ isolation: 'isolate' }}>
-        <div className="relative z-10 pt-28">
+      {/* All page content sits above the canvas at z-index 1 */}
+      <div style={{ position: 'relative', zIndex: 1, minHeight: '100vh' }}>
+        <StudiosHeader />
+        <main className="pt-28">
           <StudiosHero {...studiosData.hero} />
-
-          <div id="services">
-            <StudiosServices {...studiosData.services} />
-          </div>
-
-          <div id="portfolio">
-            <StudiosPortfolio {...studiosData.portfolio} />
-          </div>
-
-          <div id="process">
-            <StudiosProcess {...studiosData.process} />
-          </div>
-
-          <div id="team">
-            <StudiosTeam {...studiosData.team} />
-          </div>
-
-          <div id="testimonials">
-            <StudiosTestimonials {...studiosData.testimonials} />
-          </div>
-
+          <StudiosServices {...studiosData.services} />
+          <StudiosPortfolio {...studiosData.portfolio} />
+          <StudiosProcess {...studiosData.process} />
+          <StudiosTeam {...studiosData.team} />
+          <StudiosTestimonials {...studiosData.testimonials} />
           <SocialConnect worldColor={WORLD_COLOR} platforms={studiosSocialPlatforms} />
-
-          <div id="connect">
-            <StudiosConnect />
-          </div>
-
+          <StudiosConnect />
           <WorldFooter
             worldName="STUDIOS"
             worldColor={WORLD_COLOR}
             tagline="Cinematic storytelling that moves people. From concept to screen, we craft visual experiences that define brands."
           />
-        </div>
+        </main>
       </div>
     </>
   );

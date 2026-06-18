@@ -33,7 +33,7 @@ export function StudiosProcess({
   const lineHeight = useTransform(scrollYProgress, [0.1, 0.9], ['0%', '100%']);
 
   return (
-    <section id="process" ref={containerRef} className="relative py-32" style={{ background: 'rgba(8,2,2,0.72)' }}>
+    <section id="process" ref={containerRef} className="relative py-32" style={{ background: 'rgba(6,0,0,0.55)' }}>
       <Container>
         {/* Header */}
         <motion.div

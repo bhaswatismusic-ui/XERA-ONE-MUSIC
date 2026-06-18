@@ -34,7 +34,7 @@ const images = [
 
 export function MaxAbout() {
   return (
-    <section id="about" className="relative py-32 overflow-hidden" style={{ background: 'rgba(2,5,15,0.72)' }}>
+    <section id="about" className="relative py-32 overflow-hidden" style={{ background: 'rgba(0,8,18,0.55)' }}>
       {/* Background glow */}
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] pointer-events-none"

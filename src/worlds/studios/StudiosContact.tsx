@@ -46,7 +46,7 @@ export function StudiosContact({
   social,
 }: StudiosContactProps) {
   return (
-    <section id="contact" className="relative py-32" style={{ background: 'rgba(8,2,2,0.72)' }}>
+    <section id="contact" className="relative py-32" style={{ background: 'rgba(6,0,0,0.55)' }}>
       <Container>
         <div className="grid lg:grid-cols-2 gap-16">
           {/* Left: Info */}

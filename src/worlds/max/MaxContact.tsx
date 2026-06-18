@@ -28,7 +28,7 @@ export function MaxContact() {
   };
 
   return (
-    <section id="contact" className="relative py-32 overflow-hidden" style={{ background: 'rgba(2,5,15,0.72)' }}>
+    <section id="contact" className="relative py-32 overflow-hidden" style={{ background: 'rgba(0,8,18,0.55)' }}>
       {/* Background glow */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-10"

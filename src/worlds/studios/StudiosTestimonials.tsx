@@ -36,7 +36,7 @@ export function StudiosTestimonials({
   };
 
   return (
-    <section id="testimonials" className="relative py-32 overflow-hidden" style={{ background: 'rgba(8,2,2,0.72)' }}>
+    <section id="testimonials" className="relative py-32 overflow-hidden" style={{ background: 'rgba(6,0,0,0.55)' }}>
       {/* Background decoration */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px]">

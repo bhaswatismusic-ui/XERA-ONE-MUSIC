@@ -1,8 +1,3 @@
-// ============================================
-// Max World - Main Component
-// SmokeBackground (cyan) covers the entire page
-// ============================================
-
 import { SmokeBackground } from '@/components/ui/smoke-background';
 import { MaxHeader } from '@/components/layout';
 import { SEO, createWorldSEO } from '@/components/seo';
@@ -19,7 +14,6 @@ import {
 import { maxData } from '@/data/max';
 
 const WORLD_COLOR = '#00d4ff';
-const MAX_SMOKE_COLOR = '#003a5c'; // Deep cyan-teal smoke
 
 const maxSocialPlatforms = [
   { name: 'Instagram', handle: '@xeramax', url: 'https://instagram.com/xeramax', color: '#E4405F', description: 'Behind-the-scenes & daily updates' },
@@ -40,41 +34,27 @@ export function MaxWorld() {
   return (
     <>
       <SEO {...seoConfig} />
-      <MaxHeader />
 
-      {/* Cyan smoke shader — fixed canvas behind everything */}
-      <SmokeBackground smokeColor={MAX_SMOKE_COLOR} />
+      {/* Deep cyan smoke — fixed canvas, z-index 0 */}
+      <SmokeBackground smokeColor="#003a5c" />
 
-      <div className="relative min-h-screen overflow-hidden" style={{ isolation: 'isolate' }}>
-        <div className="relative z-10 pt-28">
+      {/* All page content sits above the canvas at z-index 1 */}
+      <div style={{ position: 'relative', zIndex: 1, minHeight: '100vh' }}>
+        <MaxHeader />
+        <main className="pt-28">
           <MaxHero {...maxData.hero} />
-
-          <div id="about">
-            <MaxAbout />
-          </div>
-
-          <div id="portfolio">
-            <MaxPortfolio />
-          </div>
-
-          <div id="testimonials">
-            <MaxTestimonials />
-          </div>
-
+          <MaxAbout />
+          <MaxPortfolio />
+          <MaxTestimonials />
           <SocialConnect worldColor={WORLD_COLOR} platforms={maxSocialPlatforms} />
-
-          <div id="merch">
-            <MaxMerch />
-          </div>
-
+          <MaxMerch />
           <MaxContact />
-
           <WorldFooter
             worldName="MAX"
             worldColor={WORLD_COLOR}
             tagline="The amplification engine for creators, brands, and digital experiences."
           />
-        </div>
+        </main>
       </div>
     </>
   );

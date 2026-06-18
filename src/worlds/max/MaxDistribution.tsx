@@ -30,7 +30,7 @@ export function MaxDistribution({
   bandwidth,
 }: MaxDistributionProps) {
   return (
-    <section id="distribution" className="relative py-32" style={{ background: 'rgba(2,5,15,0.72)' }}>
+    <section id="distribution" className="relative py-32" style={{ background: 'rgba(0,8,18,0.55)' }}>
       <div className="container mx-auto px-4">
         {/* Header */}
         <motion.div

@@ -49,14 +49,11 @@ function hexToRgb(hex: string): [number, number, number] {
 
 interface SmokeBackgroundProps {
   smokeColor?: string;
-  className?: string;
 }
 
-export function SmokeBackground({ smokeColor = '#808080', className = '' }: SmokeBackgroundProps) {
+export function SmokeBackground({ smokeColor = '#808080' }: SmokeBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const colorRef = useRef<[number, number, number]>(hexToRgb(smokeColor));
-
-  // Keep colorRef in sync with prop changes without re-running the WebGL setup
   colorRef.current = hexToRgb(smokeColor);
 
   useEffect(() => {
@@ -144,8 +141,16 @@ export function SmokeBackground({ smokeColor = '#808080', className = '' }: Smok
   return (
     <canvas
       ref={canvasRef}
-      className={`fixed top-0 left-0 w-full h-full ${className}`}
-      style={{ zIndex: -10 }}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        zIndex: 0,
+        display: 'block',
+        pointerEvents: 'none',
+      }}
     />
   );
 }

@@ -30,7 +30,7 @@ export function StudiosPortfolio({
   const featuredProjects = projects.filter((p) => p.featured);
 
   return (
-    <section id="portfolio" className="relative py-32" style={{ background: 'rgba(8,2,2,0.72)' }}>
+    <section id="portfolio" className="relative py-32" style={{ background: 'rgba(6,0,0,0.55)' }}>
       <Container>
         {/* Header */}
         <motion.div

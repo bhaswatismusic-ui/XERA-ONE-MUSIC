@@ -70,7 +70,7 @@ export function StudiosEnquiry({
 
   if (isSubmitted) {
     return (
-      <section id="enquiry" className="relative py-32" style={{ background: 'rgba(8,2,2,0.72)' }}>
+      <section id="enquiry" className="relative py-32" style={{ background: 'rgba(6,0,0,0.55)' }}>
         <Container>
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -99,7 +99,7 @@ export function StudiosEnquiry({
   }
 
   return (
-    <section id="enquiry" className="relative py-32" style={{ background: 'rgba(8,2,2,0.72)' }}>
+    <section id="enquiry" className="relative py-32" style={{ background: 'rgba(6,0,0,0.55)' }}>
       <Container>
         {/* Header */}
         <motion.div

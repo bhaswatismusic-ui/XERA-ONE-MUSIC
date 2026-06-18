@@ -32,7 +32,7 @@ export function MaxAnalytics({
   metrics,
 }: MaxAnalyticsProps) {
   return (
-    <section id="analytics" className="relative py-32 overflow-hidden" style={{ background: 'rgba(2,5,15,0.72)' }}>
+    <section id="analytics" className="relative py-32 overflow-hidden" style={{ background: 'rgba(0,8,18,0.55)' }}>
       {/* Background grid pattern */}
       <div className="absolute inset-0 pointer-events-none">
         <div

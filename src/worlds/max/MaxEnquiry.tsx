@@ -68,7 +68,7 @@ export function MaxEnquiry({
 
   if (isSubmitted) {
     return (
-      <section id="enquiry" className="relative py-32" style={{ background: 'rgba(2,5,15,0.72)' }}>
+      <section id="enquiry" className="relative py-32" style={{ background: 'rgba(0,8,18,0.55)' }}>
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -101,7 +101,7 @@ export function MaxEnquiry({
   }
 
   return (
-    <section id="enquiry" className="relative py-32" style={{ background: 'rgba(2,5,15,0.72)' }}>
+    <section id="enquiry" className="relative py-32" style={{ background: 'rgba(0,8,18,0.55)' }}>
       <div className="container mx-auto px-4">
         {/* Header */}
         <motion.div

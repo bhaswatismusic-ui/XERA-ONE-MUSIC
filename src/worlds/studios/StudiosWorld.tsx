@@ -1,10 +1,9 @@
 // ============================================
 // Studios World - Main Component
-// Sections: Hero, Services, Portfolio, Process, Team, Testimonials, Social, Connect, Footer
-// Red neon glow styling
+// SmokeBackground (red) covers the entire page
 // ============================================
 
-import { CinematicBackground } from '@/components/effects';
+import { SmokeBackground } from '@/components/ui/smoke-background';
 import { StudiosHeader } from '@/components/layout';
 import { SEO, createWorldSEO } from '@/components/seo';
 import { SocialConnect } from '@/components/layout/SocialConnect';
@@ -20,7 +19,8 @@ import {
 } from './';
 import { studiosData } from '@/data/studios';
 
-const WORLD_COLOR = '#ff2020'; // Red neon
+const WORLD_COLOR = '#ff2020';
+const STUDIOS_SMOKE_COLOR = '#8B0000'; // Deep red smoke
 
 const studiosSocialPlatforms = [
   { name: 'Instagram', handle: '@xerastudios', url: 'https://instagram.com/xerastudios', color: '#E4405F', description: 'Behind-the-scenes & BTS footage' },
@@ -42,47 +42,39 @@ export function StudiosWorld() {
       <SEO {...seoConfig} />
       <StudiosHeader />
 
-      <div className="relative min-h-screen overflow-hidden bg-black">
-        <CinematicBackground worldId="studios" />
+      {/* Red smoke shader — fixed canvas behind everything */}
+      <SmokeBackground smokeColor={STUDIOS_SMOKE_COLOR} />
 
+      <div className="relative min-h-screen overflow-hidden" style={{ isolation: 'isolate' }}>
         <div className="relative z-10 pt-28">
-          {/* Hero Section */}
           <StudiosHero {...studiosData.hero} />
 
-          {/* Services */}
           <div id="services">
             <StudiosServices {...studiosData.services} />
           </div>
 
-          {/* Portfolio */}
           <div id="portfolio">
             <StudiosPortfolio {...studiosData.portfolio} />
           </div>
 
-          {/* Process */}
           <div id="process">
             <StudiosProcess {...studiosData.process} />
           </div>
 
-          {/* Team */}
           <div id="team">
             <StudiosTeam {...studiosData.team} />
           </div>
 
-          {/* Testimonials */}
           <div id="testimonials">
             <StudiosTestimonials {...studiosData.testimonials} />
           </div>
 
-          {/* Social Connect */}
           <SocialConnect worldColor={WORLD_COLOR} platforms={studiosSocialPlatforms} />
 
-          {/* Connect - Get a Quote + FAQ */}
           <div id="connect">
             <StudiosConnect />
           </div>
 
-          {/* Modern Footer */}
           <WorldFooter
             worldName="STUDIOS"
             worldColor={WORLD_COLOR}

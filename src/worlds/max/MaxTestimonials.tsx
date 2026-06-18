@@ -108,7 +108,7 @@ export function MaxTestimonials({
   const lowerRow = testimonials.slice(Math.ceil(testimonials.length / 2));
 
   return (
-    <section id="testimonials" className="relative py-32 overflow-hidden" style={{ background: '#020814' }}>
+    <section id="testimonials" className="relative py-32 overflow-hidden" style={{ background: 'rgba(2,5,15,0.72)' }}>
       {/* Background */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full" style={{ background: 'radial-gradient(circle, rgba(0, 212, 255, 0.06) 0%, transparent 70%)' }} />

@@ -39,7 +39,7 @@ export function StudiosServices({
   const trackRef = useRef<HTMLDivElement>(null);
 
   return (
-    <section id="services" className="relative py-32 bg-black">
+    <section id="services" className="relative py-32" style={{ background: 'rgba(8,2,2,0.72)' }}>
       <Container>
         {/* Header */}
         <motion.div

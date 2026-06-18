@@ -1,10 +1,9 @@
 // ============================================
 // Max World - Main Component
-// Sections: Hero, About, Portfolio, Testimonials, Social, Merch, Contact, Footer
-// Cyan neon glow styling
+// SmokeBackground (cyan) covers the entire page
 // ============================================
 
-import { CinematicBackground } from '@/components/effects';
+import { SmokeBackground } from '@/components/ui/smoke-background';
 import { MaxHeader } from '@/components/layout';
 import { SEO, createWorldSEO } from '@/components/seo';
 import { SocialConnect } from '@/components/layout/SocialConnect';
@@ -19,7 +18,8 @@ import {
 } from './';
 import { maxData } from '@/data/max';
 
-const WORLD_COLOR = '#00d4ff'; // Cyan neon
+const WORLD_COLOR = '#00d4ff';
+const MAX_SMOKE_COLOR = '#003a5c'; // Deep cyan-teal smoke
 
 const maxSocialPlatforms = [
   { name: 'Instagram', handle: '@xeramax', url: 'https://instagram.com/xeramax', color: '#E4405F', description: 'Behind-the-scenes & daily updates' },
@@ -42,40 +42,33 @@ export function MaxWorld() {
       <SEO {...seoConfig} />
       <MaxHeader />
 
-      <div className="relative min-h-screen overflow-hidden" style={{ background: '#020814' }}>
-        <CinematicBackground worldId="max" />
+      {/* Cyan smoke shader — fixed canvas behind everything */}
+      <SmokeBackground smokeColor={MAX_SMOKE_COLOR} />
 
+      <div className="relative min-h-screen overflow-hidden" style={{ isolation: 'isolate' }}>
         <div className="relative z-10 pt-28">
-          {/* Hero Section */}
           <MaxHero {...maxData.hero} />
 
-          {/* About */}
           <div id="about">
             <MaxAbout />
           </div>
 
-          {/* Portfolio */}
           <div id="portfolio">
             <MaxPortfolio />
           </div>
 
-          {/* Testimonials */}
           <div id="testimonials">
             <MaxTestimonials />
           </div>
 
-          {/* Social Connect */}
           <SocialConnect worldColor={WORLD_COLOR} platforms={maxSocialPlatforms} />
 
-          {/* Merch */}
           <div id="merch">
             <MaxMerch />
           </div>
 
-          {/* Contact */}
           <MaxContact />
 
-          {/* Modern Footer */}
           <WorldFooter
             worldName="MAX"
             worldColor={WORLD_COLOR}

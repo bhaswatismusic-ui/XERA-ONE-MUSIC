@@ -37,7 +37,7 @@ export function MaxSolutions({
   const [activeSolution, setActiveSolution] = useState(0);
 
   return (
-    <section id="solutions" className="relative py-32" style={{ background: '#020814' }}>
+    <section id="solutions" className="relative py-32" style={{ background: 'rgba(2,5,15,0.72)' }}>
       <div className="container mx-auto px-4">
         {/* Header */}
         <motion.div

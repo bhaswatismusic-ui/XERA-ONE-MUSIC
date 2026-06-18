@@ -29,7 +29,7 @@ export function MaxFAQ({
   };
 
   return (
-    <section id="faq" className="relative py-32" style={{ background: '#030a14' }}>
+    <section id="faq" className="relative py-32" style={{ background: 'rgba(2,5,15,0.72)' }}>
       <div className="container mx-auto px-4">
         {/* Header */}
         <motion.div

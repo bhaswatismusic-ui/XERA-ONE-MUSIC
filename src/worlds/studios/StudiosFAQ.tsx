@@ -30,7 +30,7 @@ export function StudiosFAQ({
   };
 
   return (
-    <section id="faq" className="relative py-32 bg-black">
+    <section id="faq" className="relative py-32" style={{ background: 'rgba(8,2,2,0.72)' }}>
       <Container>
         {/* Header */}
         <motion.div

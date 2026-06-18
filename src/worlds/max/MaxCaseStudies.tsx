@@ -41,7 +41,7 @@ export function MaxCaseStudies({
   const [activeStudy, setActiveStudy] = useState(0);
 
   return (
-    <section id="case-studies" className="relative py-32" style={{ background: '#020814' }}>
+    <section id="case-studies" className="relative py-32" style={{ background: 'rgba(2,5,15,0.72)' }}>
       <div className="container mx-auto px-4">
         {/* Header */}
         <motion.div

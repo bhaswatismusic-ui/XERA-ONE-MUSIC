@@ -29,7 +29,7 @@ export function MaxHero({
   video,
 }: MaxHeroProps) {
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden" style={{ background: '#020814' }}>
+    <section className="relative min-h-screen flex items-center overflow-hidden" style={{ background: 'rgba(2,5,15,0.72)' }}>
       {/* Video Background */}
       <div className="absolute inset-0 z-0">
         <HeroVideo

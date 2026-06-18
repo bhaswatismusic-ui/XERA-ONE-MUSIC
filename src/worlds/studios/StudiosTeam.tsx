@@ -32,7 +32,7 @@ export function StudiosTeam({
   team,
 }: StudiosTeamProps) {
   return (
-    <section id="team" className="relative py-32 bg-black">
+    <section id="team" className="relative py-32" style={{ background: 'rgba(8,2,2,0.72)' }}>
       <Container>
         {/* Header */}
         <motion.div

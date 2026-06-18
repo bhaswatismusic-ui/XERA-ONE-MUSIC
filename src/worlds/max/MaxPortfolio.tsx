@@ -121,7 +121,7 @@ export function MaxPortfolio({
       : portfolioVideos.filter((v) => v.category === activeCategory);
 
   return (
-    <section id="portfolio" className="relative py-24 overflow-hidden" style={{ background: '#020814' }}>
+    <section id="portfolio" className="relative py-24 overflow-hidden" style={{ background: 'rgba(2,5,15,0.72)' }}>
       {/* Background Gradient with Neon Effect */}
       <div className="absolute inset-0 pointer-events-none">
         <div

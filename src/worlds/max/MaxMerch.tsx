@@ -142,7 +142,7 @@ export function MaxMerch() {
   };
 
   return (
-    <section id="merch" className="relative py-32 overflow-hidden" style={{ background: '#020814' }}>
+    <section id="merch" className="relative py-32 overflow-hidden" style={{ background: 'rgba(2,5,15,0.72)' }}>
       {/* Background decoration */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] rounded-full opacity-4 pointer-events-none"

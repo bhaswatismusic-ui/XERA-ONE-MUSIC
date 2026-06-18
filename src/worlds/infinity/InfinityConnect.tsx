@@ -58,7 +58,7 @@ export function InfinityConnect() {
   };
 
   return (
-    <section id="connect" className="relative py-32 overflow-hidden bg-black">
+    <section id="connect" className="relative py-32 overflow-hidden" style={{ background: 'rgba(5,8,5,0.72)' }}>
       {/* Background glow */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-10"

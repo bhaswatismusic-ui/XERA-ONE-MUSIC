@@ -36,7 +36,7 @@ export function InfinityTestimonials({
   };
 
   return (
-    <section id="testimonials" className="relative py-32 overflow-hidden" style={{ background: '#030a08' }}>
+    <section id="testimonials" className="relative py-32 overflow-hidden" style={{ background: 'rgba(5,8,5,0.72)' }}>
       <div className="container mx-auto px-4 relative z-10">
         {/* Header */}
         <motion.div

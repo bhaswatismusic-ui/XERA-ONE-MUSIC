@@ -50,10 +50,18 @@ export function SuperHeader() {
               whileTap={{ scale: 0.98 }}
             >
               <div className="relative w-9 h-9 flex items-center justify-center">
-                <span className="text-xl font-bold text-white tracking-tighter">X</span>
+                <span
+                  className="text-xl font-bold text-white tracking-tighter"
+                  style={{ textShadow: '0 0 8px #00d4ff, 0 0 16px rgba(0,212,255,0.6)' }}
+                >
+                  X
+                </span>
                 <div className="absolute inset-0 border border-white/20 rounded" />
               </div>
-              <span className="text-sm font-semibold tracking-widest text-white/80 group-hover:text-white transition-colors uppercase">
+              <span
+                className="text-sm font-semibold tracking-widest text-white/80 group-hover:text-white transition-colors uppercase"
+                style={{ textShadow: '0 0 10px rgba(0,212,255,0.6)' }}
+              >
                 X-ERA ONE
               </span>
             </motion.button>

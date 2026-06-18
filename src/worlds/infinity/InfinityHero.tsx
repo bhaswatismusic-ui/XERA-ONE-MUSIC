@@ -29,13 +29,13 @@ export function InfinityHero({
   video,
 }: InfinityHeroProps) {
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden bg-black">
+    <section className="relative min-h-screen flex items-center overflow-hidden" style={{ background: 'transparent' }}>
       {/* Video Background */}
       <div className="absolute inset-0 z-0">
         <HeroVideo
           video={video}
           overlay
-          overlayOpacity={0.75}
+          overlayOpacity={0.55}
           overlayGradient
         />
       </div>

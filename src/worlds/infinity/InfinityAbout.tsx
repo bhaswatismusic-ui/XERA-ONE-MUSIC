@@ -41,7 +41,7 @@ export function InfinityAbout({
   const imageY = useTransform(scrollYProgress, [0, 1], [100, -100]);
 
   return (
-    <section ref={sectionRef} id="about" className="relative py-32 overflow-hidden bg-black">
+    <section ref={sectionRef} id="about" className="relative py-32 overflow-hidden" style={{ background: 'rgba(5,8,5,0.72)' }}>
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Text Content */}

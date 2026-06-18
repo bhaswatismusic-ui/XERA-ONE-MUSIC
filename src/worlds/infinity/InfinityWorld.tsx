@@ -1,10 +1,9 @@
 // ============================================
 // Infinity World - Main Component
-// Sections: Hero, About, Projects, Testimonials, Social, Connect, Footer
-// Green neon glow styling
+// ShaderBackground as full-page background
 // ============================================
 
-import { CinematicBackground } from '@/components/effects';
+import ShaderBackground from '@/components/ui/shader-background';
 import { InfinityHeader } from '@/components/layout';
 import { SEO, createWorldSEO } from '@/components/seo';
 import { SocialConnect } from '@/components/layout/SocialConnect';
@@ -18,7 +17,7 @@ import {
 } from './';
 import { infinityData } from '@/data/infinity';
 
-const WORLD_COLOR = '#00ff6a'; // Green neon
+const WORLD_COLOR = '#00ff6a';
 
 const infinitySocialPlatforms = [
   { name: 'Instagram', handle: '@xerainfinity', url: 'https://instagram.com/xerainfinity', color: '#E4405F', description: 'AI breakthroughs & visual updates' },
@@ -41,39 +40,42 @@ export function InfinityWorld() {
       <SEO {...seoConfig} />
       <InfinityHeader />
 
-      <div className="relative min-h-screen overflow-hidden bg-black">
-        <CinematicBackground worldId="infinity" />
+      {/*
+        ShaderBackground renders a fixed <canvas> at z-index -10.
+        The page content sits above it. Sections with rgba() backgrounds
+        let the animated shader bleed through as a glow.
+      */}
+      <ShaderBackground />
 
-        <div className="relative z-10 pt-28">
-          {/* Hero Section */}
-          <InfinityHero {...infinityData.hero} />
+      <div className="relative min-h-screen overflow-hidden pt-28" style={{ isolation: 'isolate' }}>
+        {/* Hero — fully transparent so shader shows */}
+        <InfinityHero {...infinityData.hero} />
 
-          {/* About */}
-          <div id="about">
-            <InfinityAbout {...infinityData.about} />
-          </div>
-
-          {/* Projects */}
-          <InfinityProjects />
-
-          {/* Testimonials */}
-          <div id="testimonials">
-            <InfinityTestimonials {...infinityData.testimonials} />
-          </div>
-
-          {/* Social Connect */}
-          <SocialConnect worldColor={WORLD_COLOR} platforms={infinitySocialPlatforms} />
-
-          {/* Connect - FAQ + Contact */}
-          <InfinityConnect />
-
-          {/* Modern Footer */}
-          <WorldFooter
-            worldName="INFINITY"
-            worldColor={WORLD_COLOR}
-            tagline="Pushing the boundaries of intelligent systems, machine learning, and automation."
-          />
+        {/* About */}
+        <div id="about">
+          <InfinityAbout {...infinityData.about} />
         </div>
+
+        {/* Projects */}
+        <InfinityProjects />
+
+        {/* Testimonials */}
+        <div id="testimonials">
+          <InfinityTestimonials {...infinityData.testimonials} />
+        </div>
+
+        {/* Social Connect */}
+        <SocialConnect worldColor={WORLD_COLOR} platforms={infinitySocialPlatforms} />
+
+        {/* Connect - FAQ + Contact */}
+        <InfinityConnect />
+
+        {/* Footer */}
+        <WorldFooter
+          worldName="INFINITY"
+          worldColor={WORLD_COLOR}
+          tagline="Pushing the boundaries of intelligent systems, machine learning, and automation."
+        />
       </div>
     </>
   );

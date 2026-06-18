@@ -81,25 +81,39 @@ export function Gateway() {
             {/* Animated X Logo */}
             <AnimatedXLogo size={300} />
 
-            {/* Universe name */}
+            {/* Universe name — cycling neon glow */}
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-              className="mt-8 text-5xl md:text-6xl lg:text-7xl font-bold tracking-wider text-white"
-              style={{
-                textShadow: '0 0 60px rgba(255,255,255,0.3)',
+              animate={{
+                opacity: 1,
+                y: 0,
+                textShadow: [
+                  '0 0 10px #00d4ff, 0 0 25px #00d4ff, 0 0 50px #00d4ff, 0 0 90px rgba(0,212,255,0.5)',
+                  '0 0 10px #ff2020, 0 0 25px #ff2020, 0 0 50px #ff2020, 0 0 90px rgba(255,32,32,0.5)',
+                  '0 0 10px #00ff6a, 0 0 25px #00ff6a, 0 0 50px #00ff6a, 0 0 90px rgba(0,255,106,0.5)',
+                  '0 0 10px #00d4ff, 0 0 25px #00d4ff, 0 0 50px #00d4ff, 0 0 90px rgba(0,212,255,0.5)',
+                ],
               }}
+              transition={{
+                opacity: { duration: 0.8, delay: 0.8 },
+                y: { duration: 0.8, delay: 0.8 },
+                textShadow: { duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 1.2 },
+              }}
+              className="mt-8 text-5xl md:text-6xl lg:text-7xl font-bold tracking-wider text-white"
             >
               {universeConfig.name}
             </motion.h1>
 
-            {/* Tagline */}
+            {/* Tagline — subtle neon */}
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 1.2 }}
-              className="mt-4 text-xl md:text-2xl text-white/60 tracking-wide"
+              className="mt-4 text-xl md:text-2xl tracking-wide"
+              style={{
+                color: '#ffffff',
+                textShadow: '0 0 8px #00d4ff, 0 0 20px rgba(0,212,255,0.4)',
+              }}
             >
               {universeConfig.tagline}
             </motion.p>

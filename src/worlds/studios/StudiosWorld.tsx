@@ -1,4 +1,4 @@
-import { SmokeBackground } from '@/components/ui/smoke-background';
+import StudiosShaderBackground from '@/components/ui/StudiosShaderBackground';
 import { StudiosHeader } from '@/components/layout';
 import { SEO, createWorldSEO } from '@/components/seo';
 import { SocialConnect } from '@/components/layout/SocialConnect';
@@ -35,8 +35,8 @@ export function StudiosWorld() {
     <>
       <SEO {...seoConfig} />
 
-      {/* Deep crimson smoke — fixed canvas, z-index 0 */}
-      <SmokeBackground smokeColor="#8B0000" />
+      {/* Red plasma shader — fixed canvas, z-index -10 */}
+      <StudiosShaderBackground />
 
       {/* All page content sits above the canvas at z-index 1 */}
       <div style={{ position: 'relative', zIndex: 1, minHeight: '100vh' }}>

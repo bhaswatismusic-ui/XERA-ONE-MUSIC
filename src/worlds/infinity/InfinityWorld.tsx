@@ -3,7 +3,7 @@
 // ShaderBackground as full-page background
 // ============================================
 
-import ShaderBackground from '@/components/ui/shader-background';
+import InfinityShaderBackground from '@/components/ui/InfinityShaderBackground';
 import { InfinityHeader } from '@/components/layout';
 import { SEO, createWorldSEO } from '@/components/seo';
 import { SocialConnect } from '@/components/layout/SocialConnect';
@@ -40,12 +40,8 @@ export function InfinityWorld() {
       <SEO {...seoConfig} />
       <InfinityHeader />
 
-      {/*
-        ShaderBackground renders a fixed <canvas> at z-index -10.
-        The page content sits above it. Sections with rgba() backgrounds
-        let the animated shader bleed through as a glow.
-      */}
-      <ShaderBackground />
+      {/* Green plasma shader — fixed canvas, z-index -10 */}
+      <InfinityShaderBackground />
 
       <div className="relative min-h-screen overflow-hidden pt-28" style={{ isolation: 'isolate' }}>
         {/* Hero — fully transparent so shader shows */}

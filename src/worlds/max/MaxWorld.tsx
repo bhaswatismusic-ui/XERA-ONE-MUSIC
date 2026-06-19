@@ -1,4 +1,4 @@
-import { SmokeBackground } from '@/components/ui/smoke-background';
+import MaxShaderBackground from '@/components/ui/MaxShaderBackground';
 import { MaxHeader } from '@/components/layout';
 import { SEO, createWorldSEO } from '@/components/seo';
 import { SocialConnect } from '@/components/layout/SocialConnect';
@@ -35,8 +35,8 @@ export function MaxWorld() {
     <>
       <SEO {...seoConfig} />
 
-      {/* Deep cyan smoke — fixed canvas, z-index 0 */}
-      <SmokeBackground smokeColor="#003a5c" />
+      {/* Purple plasma shader — fixed canvas, z-index -10 */}
+      <MaxShaderBackground />
 
       {/* All page content sits above the canvas at z-index 1 */}
       <div style={{ position: 'relative', zIndex: 1, minHeight: '100vh' }}>

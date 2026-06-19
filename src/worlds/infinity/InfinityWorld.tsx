@@ -3,7 +3,7 @@
 // ShaderBackground as full-page background
 // ============================================
 
-import InfinityShaderBackground from '@/components/ui/InfinityShaderBackground';
+import { InfinitySmokeBackground } from '@/components/ui/InfinitySmokeBackground';
 import { InfinityHeader } from '@/components/layout';
 import { SEO, createWorldSEO } from '@/components/seo';
 import { SocialConnect } from '@/components/layout/SocialConnect';
@@ -40,8 +40,8 @@ export function InfinityWorld() {
       <SEO {...seoConfig} />
       <InfinityHeader />
 
-      {/* Green plasma shader — fixed canvas, z-index -10 */}
-      <InfinityShaderBackground />
+      {/* Neon green smoke — vertical columns from edges fading to center */}
+      <InfinitySmokeBackground />
 
       <div className="relative min-h-screen overflow-hidden pt-28" style={{ isolation: 'isolate' }}>
         {/* Hero — fully transparent so shader shows */}

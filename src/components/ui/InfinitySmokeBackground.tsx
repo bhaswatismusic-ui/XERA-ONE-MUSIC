@@ -21,7 +21,7 @@ float fbm(vec2 p){float t=.0,a=1.;for(int i=0;i<5;i++){t+=a*noise(p);p*=mat2(1,-
 
 void main(){
   vec2 uv=(FC-.5*R)/R.y;
-  vec3 col=vec3(0.02, 0.02, 0.04);
+  vec3 col=vec3(0.02, 0.04, 0.02);
 
   // Vertical fade from top to bottom
   float verticalFade = 1.0 - pow(abs(uv.y) * 0.8, 0.5);
@@ -37,7 +37,7 @@ void main(){
   float leftSmoke = 0.0;
   if(uv.x < 0.4) {
     vec2 leftUv = uv;
-    leftUv.x = leftUv.x * 3.0 + 0.5; // Compress to left edge
+    leftUv.x = leftUv.x * 3.0 + 0.5;
     leftUv.y -= T * 0.03; // Upward animation
 
     float n = fbm(leftUv * vec2(2.0, 1.5) + vec2(0.0, T * 0.02));
@@ -51,7 +51,7 @@ void main(){
   float rightSmoke = 0.0;
   if(uv.x > -0.4) {
     vec2 rightUv = uv;
-    rightUv.x = rightUv.x * 3.0 - 0.5; // Compress to right edge
+    rightUv.x = rightUv.x * 3.0 - 0.5;
     rightUv.y -= T * 0.035; // Slightly different speed for variation
 
     float n = fbm(rightUv * vec2(2.0, 1.5) + vec2(10.0, T * 0.02));
@@ -66,10 +66,10 @@ void main(){
   smoke *= horizontalFade;
   smoke = clamp(smoke, 0.0, 1.0);
 
-  // Neon blue color with glow
-  vec3 neonBlue = vec3(0.0, 0.6, 1.0);
-  vec3 deepBlue = vec3(0.0, 0.2, 0.4);
-  vec3 smokeColor = mix(deepBlue, neonBlue, smoke);
+  // Neon green color with glow
+  vec3 neonGreen = vec3(0.0, 1.0, 0.3);
+  vec3 deepGreen = vec3(0.0, 0.3, 0.1);
+  vec3 smokeColor = mix(deepGreen, neonGreen, smoke);
 
   // Add glow effect
   float glow = pow(smoke, 0.8) * 1.2;
@@ -77,13 +77,13 @@ void main(){
 
   // Subtle ambient glow in the smoke areas
   float ambientGlow = horizontalFade * verticalFade * 0.15;
-  col += vec3(0.0, 0.1, 0.2) * ambientGlow;
+  col += vec3(0.0, 0.15, 0.05) * ambientGlow;
 
   col = clamp(col, 0.0, 1.0);
   O = vec4(col, 1.0);
 }`;
 
-export function MaxSmokeBackground() {
+export function InfinitySmokeBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -183,4 +183,4 @@ export function MaxSmokeBackground() {
   );
 }
 
-export default MaxSmokeBackground;
+export default InfinitySmokeBackground;

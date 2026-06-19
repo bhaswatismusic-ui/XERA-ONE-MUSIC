@@ -26,76 +26,76 @@ void main(){
   // Center distance for fading
   float distFromCenter = abs(uv.x);
 
-  // Smoke intensity - strongest at edges, fades toward center
-  float edgeIntensity = smoothstep(0.0, 0.7, distFromCenter);
+  // Smoke intensity - pushed hard toward edges, center stays clean
+  float edgeIntensity = smoothstep(0.25, 0.95, distFromCenter);
 
-  // Left smoke - flowing right
+  // Left smoke - flowing right, confined to the left third
   float leftSmoke = 0.0;
-  if(uv.x < 0.5) {
+  if(uv.x < 0.35) {
     vec2 leftUv = uv;
     leftUv.x = leftUv.x * 2.5 + 0.8;
-    leftUv.x += T * 0.08; // Flow to the right
+    leftUv.x += T * 0.06; // slow, gentle drift
 
     // Multiple layers of wispy smoke
-    float n1 = fbm(leftUv * vec2(1.5, 3.0) + vec2(T * 0.02, T * 0.01));
-    float n2 = fbm(leftUv * vec2(2.5, 4.0) - vec2(T * 0.03, T * 0.015));
-    float n3 = fbm(leftUv * vec2(0.8, 2.0) + vec2(T * 0.01, -T * 0.008));
+    float n1 = fbm(leftUv * vec2(1.5, 3.0) + vec2(T * 0.015, T * 0.008));
+    float n2 = fbm(leftUv * vec2(2.5, 4.0) - vec2(T * 0.02, T * 0.01));
+    float n3 = fbm(leftUv * vec2(0.8, 2.0) + vec2(T * 0.008, -T * 0.006));
 
     float n = n1 * 0.5 + n2 * 0.35 + n3 * 0.25;
 
-    // Edge fade - stronger near left edge
-    float edgeFade = 1.0 - smoothstep(-0.8, 0.4, uv.x);
+    // Edge fade - tightened so it dies out well before the center
+    float edgeFade = 1.0 - smoothstep(-0.9, -0.05, uv.x);
     // Vertical wisps
     float verticalFade = 1.0 - pow(abs(uv.y) * 0.5, 0.6);
 
-    leftSmoke = n * edgeFade * verticalFade * edgeIntensity * 2.0;
+    leftSmoke = n * edgeFade * verticalFade * edgeIntensity * 0.9;
   }
 
-  // Right smoke - flowing left
+  // Right smoke - flowing left, confined to the right third
   float rightSmoke = 0.0;
-  if(uv.x > -0.5) {
+  if(uv.x > -0.35) {
     vec2 rightUv = uv;
     rightUv.x = rightUv.x * 2.5 - 0.8;
-    rightUv.x -= T * 0.085; // Flow to the left
+    rightUv.x -= T * 0.065; // slow, gentle drift
 
     // Multiple layers of wispy smoke
-    float n1 = fbm(rightUv * vec2(1.5, 3.0) + vec2(10.0 + T * 0.02, T * 0.01));
-    float n2 = fbm(rightUv * vec2(2.5, 4.0) - vec2(10.0 + T * 0.03, T * 0.015));
-    float n3 = fbm(rightUv * vec2(0.8, 2.0) + vec2(10.0 + T * 0.01, -T * 0.008));
+    float n1 = fbm(rightUv * vec2(1.5, 3.0) + vec2(10.0 + T * 0.015, T * 0.008));
+    float n2 = fbm(rightUv * vec2(2.5, 4.0) - vec2(10.0 + T * 0.02, T * 0.01));
+    float n3 = fbm(rightUv * vec2(0.8, 2.0) + vec2(10.0 + T * 0.008, -T * 0.006));
 
     float n = n1 * 0.5 + n2 * 0.35 + n3 * 0.25;
 
-    // Edge fade - stronger near right edge
-    float edgeFade = 1.0 - smoothstep(0.8, -0.4, uv.x);
+    // Edge fade - tightened so it dies out well before the center
+    float edgeFade = 1.0 - smoothstep(0.9, 0.05, uv.x);
     // Vertical wisps
     float verticalFade = 1.0 - pow(abs(uv.y) * 0.5, 0.6);
 
-    rightSmoke = n * edgeFade * verticalFade * edgeIntensity * 2.0;
+    rightSmoke = n * edgeFade * verticalFade * edgeIntensity * 0.9;
   }
 
   // Combine smokes
   float smoke = leftSmoke + rightSmoke;
-  smoke = clamp(smoke, 0.0, 1.5);
+  smoke = clamp(smoke, 0.0, 1.0);
 
-  // Neon blue color
-  vec3 neonBlue = vec3(0.0, 0.7, 1.0);
-  vec3 deepBlue = vec3(0.0, 0.15, 0.3);
-  vec3 glowBlue = vec3(0.2, 0.5, 0.8);
+  // Neon blue color, softened for a premium cinematic look
+  vec3 neonBlue = vec3(0.0, 0.55, 0.85);
+  vec3 deepBlue = vec3(0.0, 0.1, 0.22);
+  vec3 glowBlue = vec3(0.15, 0.38, 0.6);
 
   // Layered color for depth
   vec3 smokeColor = mix(deepBlue, neonBlue, pow(smoke, 0.7));
   smokeColor = mix(smokeColor, glowBlue, pow(smoke, 1.5) * 0.5);
 
-  // Add glow
-  col += smokeColor * smoke * 0.8;
+  // Add glow - dialed down for subtlety
+  col += smokeColor * smoke * 0.42;
 
-  // Extra glow layer for 3D effect
-  float glow = pow(smoke, 1.2) * 0.4;
+  // Soft secondary glow layer, gives gentle depth without heavy fog
+  float glow = pow(smoke, 1.6) * 0.16;
   col += neonBlue * glow;
 
-  // Subtle center fade to black
-  float centerFade = smoothstep(0.0, 0.3, distFromCenter);
-  col *= 0.3 + centerFade * 0.7;
+  // Strong center fade to near-black, keeps a clean zone for text/UI
+  float centerFade = smoothstep(0.0, 0.55, distFromCenter);
+  col *= 0.08 + centerFade * 0.92;
 
   col = clamp(col, 0.0, 1.0);
   O = vec4(col, 1.0);

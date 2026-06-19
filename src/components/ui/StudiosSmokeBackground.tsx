@@ -17,67 +17,85 @@ uniform vec2 resolution;
 
 float rnd(vec2 p){p=fract(p*vec2(12.9898,78.233));p+=dot(p,p+34.56);return fract(p.x*p.y);}
 float noise(vec2 p){vec2 i=floor(p),f=fract(p),u=f*f*(3.-2.*f);return mix(mix(rnd(i),rnd(i+vec2(1,0)),u.x),mix(rnd(i+vec2(0,1)),rnd(i+1.),u.x),u.y);}
-float fbm(vec2 p){float t=.0,a=1.;for(int i=0;i<5;i++){t+=a*noise(p);p*=mat2(1,-1.2,.2,1.2)*2.;a*=.5;}return t;}
+float fbm(vec2 p){float t=.0,a=1.;for(int i=0;i<6;i++){t+=a*noise(p);p*=mat2(1,-1.1,.15,1.1)*2.2;a*=.45;}return t;}
 
 void main(){
   vec2 uv=(FC-.5*R)/R.y;
-  vec3 col=vec3(0.04, 0.02, 0.02);
+  vec3 col=vec3(0.02, 0.01, 0.01);
 
-  // Vertical fade from top to bottom
-  float verticalFade = 1.0 - pow(abs(uv.y) * 0.8, 0.5);
-
-  // Distance from center - creates the fade in the middle
+  // Center distance for fading
   float distFromCenter = abs(uv.x);
 
-  // Horizontal fade: strong at edges, weak in middle
-  float horizontalFade = pow(distFromCenter, 1.5) * 2.0;
-  horizontalFade = clamp(horizontalFade, 0.0, 1.0);
+  // Smoke intensity - strongest at edges, fades toward center
+  float edgeIntensity = smoothstep(0.0, 0.7, distFromCenter);
 
-  // Left smoke column - upward flow
+  // Left smoke - flowing right
   float leftSmoke = 0.0;
-  if(uv.x < 0.4) {
+  if(uv.x < 0.5) {
     vec2 leftUv = uv;
-    leftUv.x = leftUv.x * 3.0 + 0.5;
-    leftUv.y -= T * 0.028; // Upward animation
+    leftUv.x = leftUv.x * 2.5 + 0.8;
+    leftUv.x += T * 0.08; // Flow to the right
 
-    float n = fbm(leftUv * vec2(2.0, 1.5) + vec2(0.0, T * 0.02));
-    n += fbm(leftUv * vec2(4.0, 2.0) - vec2(T * 0.015, T * 0.01));
+    // Multiple layers of wispy smoke
+    float n1 = fbm(leftUv * vec2(1.5, 3.0) + vec2(T * 0.02, T * 0.01));
+    float n2 = fbm(leftUv * vec2(2.5, 4.0) - vec2(T * 0.03, T * 0.015));
+    float n3 = fbm(leftUv * vec2(0.8, 2.0) + vec2(T * 0.01, -T * 0.008));
 
-    float edgeFade = smoothstep(-0.8, -0.2, uv.x);
-    leftSmoke = n * edgeFade * verticalFade * 1.5;
+    float n = n1 * 0.5 + n2 * 0.35 + n3 * 0.25;
+
+    // Edge fade - stronger near left edge
+    float edgeFade = 1.0 - smoothstep(-0.8, 0.4, uv.x);
+    // Vertical wisps
+    float verticalFade = 1.0 - pow(abs(uv.y) * 0.5, 0.6);
+
+    leftSmoke = n * edgeFade * verticalFade * edgeIntensity * 2.0;
   }
 
-  // Right smoke column - upward flow
+  // Right smoke - flowing left
   float rightSmoke = 0.0;
-  if(uv.x > -0.4) {
+  if(uv.x > -0.5) {
     vec2 rightUv = uv;
-    rightUv.x = rightUv.x * 3.0 - 0.5;
-    rightUv.y -= T * 0.032; // Slightly different speed for variation
+    rightUv.x = rightUv.x * 2.5 - 0.8;
+    rightUv.x -= T * 0.085; // Flow to the left
 
-    float n = fbm(rightUv * vec2(2.0, 1.5) + vec2(10.0, T * 0.02));
-    n += fbm(rightUv * vec2(4.0, 2.0) - vec2(T * 0.015, T * 0.01) + vec2(5.0, 0.0));
+    // Multiple layers of wispy smoke
+    float n1 = fbm(rightUv * vec2(1.5, 3.0) + vec2(10.0 + T * 0.02, T * 0.01));
+    float n2 = fbm(rightUv * vec2(2.5, 4.0) - vec2(10.0 + T * 0.03, T * 0.015));
+    float n3 = fbm(rightUv * vec2(0.8, 2.0) + vec2(10.0 + T * 0.01, -T * 0.008));
 
-    float edgeFade = smoothstep(0.8, 0.2, uv.x);
-    rightSmoke = n * edgeFade * verticalFade * 1.5;
+    float n = n1 * 0.5 + n2 * 0.35 + n3 * 0.25;
+
+    // Edge fade - stronger near right edge
+    float edgeFade = 1.0 - smoothstep(0.8, -0.4, uv.x);
+    // Vertical wisps
+    float verticalFade = 1.0 - pow(abs(uv.y) * 0.5, 0.6);
+
+    rightSmoke = n * edgeFade * verticalFade * edgeIntensity * 2.0;
   }
 
   // Combine smokes
   float smoke = leftSmoke + rightSmoke;
-  smoke *= horizontalFade;
-  smoke = clamp(smoke, 0.0, 1.0);
+  smoke = clamp(smoke, 0.0, 1.5);
 
-  // Neon red color with glow
-  vec3 neonRed = vec3(1.0, 0.1, 0.1);
-  vec3 deepRed = vec3(0.4, 0.05, 0.05);
-  vec3 smokeColor = mix(deepRed, neonRed, smoke);
+  // Neon red color
+  vec3 neonRed = vec3(1.0, 0.15, 0.1);
+  vec3 deepRed = vec3(0.3, 0.05, 0.03);
+  vec3 glowRed = vec3(0.8, 0.3, 0.2);
 
-  // Add glow effect
-  float glow = pow(smoke, 0.8) * 1.2;
-  col += smokeColor * glow;
+  // Layered color for depth
+  vec3 smokeColor = mix(deepRed, neonRed, pow(smoke, 0.7));
+  smokeColor = mix(smokeColor, glowRed, pow(smoke, 1.5) * 0.5);
 
-  // Subtle ambient glow in the smoke areas
-  float ambientGlow = horizontalFade * verticalFade * 0.15;
-  col += vec3(0.15, 0.03, 0.03) * ambientGlow;
+  // Add glow
+  col += smokeColor * smoke * 0.8;
+
+  // Extra glow layer for 3D effect
+  float glow = pow(smoke, 1.2) * 0.4;
+  col += neonRed * glow;
+
+  // Subtle center fade to black
+  float centerFade = smoothstep(0.0, 0.3, distFromCenter);
+  col *= 0.3 + centerFade * 0.7;
 
   col = clamp(col, 0.0, 1.0);
   O = vec4(col, 1.0);
